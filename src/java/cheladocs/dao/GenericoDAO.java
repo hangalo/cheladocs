@@ -5,6 +5,7 @@
  */
 package cheladocs.dao;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ public interface GenericoDAO<T> {
     void delete(T t);
     T findById(Integer id);
     List<T> findAll();
+    void popularComDados(T t, ResultSet rs);
 }
 
 

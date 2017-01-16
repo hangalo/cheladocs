@@ -6,6 +6,7 @@
 package cheladocs.dao;
 
 import cheladocs.modelo.Municipio;
+import java.sql.ResultSet;
 import java.util.List;
 
 /**
@@ -48,6 +49,11 @@ public class MunicipioDAO implements GenericoDAO<Municipio>{
     public List<Municipio> findAll() {
         //To change body of generated methods, choose Tools | Templates.
         return null;
+    }
+
+    @Override
+    public void popularComDados(Municipio t, ResultSet rs) {
+        //To change body of generated methods, choose Tools | Templates.
     }
    
     
