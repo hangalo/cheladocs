@@ -10,25 +10,26 @@ package cheladocs.modelo;
  * @author informatica
  */
 public class Municipio {
-    private Integer codigoMunicipio;
+    private Integer idMunicipio;
     private String nomeMunicipio;
     private Provincia provinciaMunicipio;
 
     public Municipio() {
     }
 
-    public Municipio(Integer codigoMunicipio, String nomeMunicipio, Provincia provinciaMunicipio) {
-        this.codigoMunicipio = codigoMunicipio;
+    public Municipio(Integer idMunicipio, String nomeMunicipio, Provincia provinciaMunicipio) {
+        this.idMunicipio = idMunicipio;
         this.nomeMunicipio = nomeMunicipio;
         this.provinciaMunicipio = provinciaMunicipio;
     }
+    
 
-    public Integer getCodigoMunicipio() {
-        return codigoMunicipio;
+    public Integer getIdMunicipio() {
+        return idMunicipio;
     }
 
-    public void setCodigoMunicipio(Integer codigoMunicipio) {
-        this.codigoMunicipio = codigoMunicipio;
+    public void setIdMunicipio(Integer idMunicipio) {
+        this.idMunicipio = idMunicipio;
     }
 
     public String getNomeMunicipio() {
@@ -46,6 +47,7 @@ public class Municipio {
     public void setProvinciaMunicipio(Provincia provinciaMunicipio) {
         this.provinciaMunicipio = provinciaMunicipio;
     }
-    
+
+   
     
 }
