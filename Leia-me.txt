@@ -1,0 +1,2 @@
+Nesta primeira versão terminei o modelo e a DAO das classes: Departamento, Documento, Endereco, MovimentoDocumento, Natureza Assunto, Requerente e TipoExpediente.
+Também já fiz os testes nas Classes Departamento, NaturezaAssunto e Requerente. Na Classe TipoExpedienteDAO ainda não fiz a definição dos metodos.
