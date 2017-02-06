@@ -21,6 +21,12 @@ public class Documento {
     private TipoExpediente tipoExpediente;
     private String urlFicheiroDocumento;
     private String conteudoDocumento;
+    
+    public Documento(){
+        requerente = new Requerente();
+        naturezaAssunto = new NaturezaAssunto();
+        tipoExpediente = new TipoExpediente();
+    }
 
     public int getNumeroProtocolo() {
         return numeroProtocolo;

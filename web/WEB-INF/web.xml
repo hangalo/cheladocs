@@ -1,9 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	 version="3.1">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>PaisServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.PaisServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProvinciaServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.ProvinciaServlet</servlet-class>
+    </servlet> 
+    <servlet>
+        <servlet-name>MunicipioServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.MunicipioServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DepartamentoServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.DepartamentoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NaturezaAssuntoServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.NaturezaAssuntoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TipoExpedienteServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.TipoExpedienteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RequerenteServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.RequerenteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DocumentoServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.DocumentoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MovimentoDocumentoServlet</servlet-name>
+        <servlet-class>cheladocs.controlo.MovimentoDocumentoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaisServlet</servlet-name>
+        <url-pattern>/PaisServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProvinciaServlet</servlet-name>
+        <url-pattern>/ProvinciaServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MunicipioServlet</servlet-name>
+        <url-pattern>/MunicipioServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DepartamentoServlet</servlet-name>
+        <url-pattern>/DepartamentoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NaturezaAssuntoServlet</servlet-name>
+        <url-pattern>/NaturezaAssuntoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TipoExpedienteServlet</servlet-name>
+        <url-pattern>/TipoExpedienteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RequerenteServlet</servlet-name>
+        <url-pattern>/RequerenteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DocumentoServlet</servlet-name>
+        <url-pattern>/DocumentoServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MovimentoDocumentoServlet</servlet-name>
+        <url-pattern>/MovimentoDocumentoServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

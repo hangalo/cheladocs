@@ -5,9 +5,10 @@
  */
 package cheladocs.controlo;
 
-import cheladocs.dao.MunicipioDAO;
-import cheladocs.modelo.Municipio;
+import cheladocs.dao.PaisDAO;
+import cheladocs.modelo.Pais;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,49 +17,55 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author informatica
+ * @author Adelino Eduardo
  */
-@WebServlet(name = "municipioServlet", urlPatterns = {"/municipioServlet"})
-public class MunicipioServlet extends HttpServlet {
+@WebServlet(name = "PaisServlet", urlPatterns = {"/PaisServlet"})
+public class PaisServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MunicipioDAO municipioDAO = new MunicipioDAO();
-        
         String comando = request.getParameter("comando");
         
         if (comando == null) comando = "salvar";
         
+        PaisDAO paisDAO = new PaisDAO();
         if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, municipioDAO);
+            salvar(request, response, paisDAO);
         else if (comando.equalsIgnoreCase("update"))
-            update(request, response, municipioDAO);
+            update(request, response, paisDAO);
         else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, municipioDAO);
+            delete(request, response, paisDAO);
     }
     
-    private void salvar(HttpServletRequest request, HttpServletResponse response, MunicipioDAO municipioDAO) throws IOException{
-        Municipio municipio = new Municipio();
-        municipio.setNomeMunicipio(request.getParameter("nomeMunicipio"));
-        municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        municipioDAO.save(municipio);
-        response.sendRedirect("MunicipioInserir.jsp");
+    private void salvar(HttpServletRequest request, HttpServletResponse response, PaisDAO paisDAO) throws IOException{
+        Pais pais = new Pais();
+        pais.setNomePais(request.getParameter("nomePais"));
+        paisDAO.save(pais);
+        response.sendRedirect("PaisInserir.jsp");
     }
     
-    private void update(HttpServletRequest request, HttpServletResponse response, MunicipioDAO municipioDAO) throws IOException{
-        Municipio municipio = new Municipio();
-        municipio.setNomeMunicipio(request.getParameter("nomeMunicipio"));
-        municipio.setIdMunicipio(Integer.parseInt(request.getParameter("codigoMunicipio")));
-        municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        municipioDAO.update(municipio);
-        response.sendRedirect("MunicipioListar.jsp");
+    private void update(HttpServletRequest request, HttpServletResponse response, PaisDAO paisDAO) throws IOException{
+        Pais pais = new Pais();
+        pais.setNomePais(request.getParameter("nomePais"));
+        pais.setIdPais(Integer.parseInt(request.getParameter("codigoPais")));
+        paisDAO.update(pais);
+        response.sendRedirect("PaisListar.jsp");
     }
     
-    private void delete(HttpServletRequest request, HttpServletResponse response, MunicipioDAO municipioDAO) throws IOException{
-        Municipio municipio = new Municipio();
-        municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        municipioDAO.delete(municipio);
-        response.sendRedirect("MunicipioListar.jsp");
+    private void delete(HttpServletRequest request, HttpServletResponse response, PaisDAO paisDAO) throws IOException{
+        Pais pais = new Pais();
+        pais.setIdPais(Integer.parseInt(request.getParameter("codigoPais")));
+        paisDAO.delete(pais);
+        response.sendRedirect("PaisListar.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

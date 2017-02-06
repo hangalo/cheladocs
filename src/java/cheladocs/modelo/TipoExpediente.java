@@ -11,7 +11,7 @@ package cheladocs.modelo;
  */
 public class TipoExpediente {
     private int idTipoExpediente;
-    private String tipo_expediente;
+    private String tipoExpediente;
 
     public int getIdTipoExpediente() {
         return idTipoExpediente;
@@ -21,12 +21,15 @@ public class TipoExpediente {
         this.idTipoExpediente = idTipoExpediente;
     }
 
-    public String getTipo_expediente() {
-        return tipo_expediente;
+    public String getTipoExpediente() {
+        return tipoExpediente;
     }
 
-    public void setTipo_expediente(String tipo_expediente) {
-        this.tipo_expediente = tipo_expediente;
+    public void setTipoExpediente(String tipoExpediente) {
+        this.tipoExpediente = tipoExpediente;
     }
+
+    
+    
     
 }

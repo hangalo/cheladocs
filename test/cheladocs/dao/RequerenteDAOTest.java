@@ -29,7 +29,7 @@ public class RequerenteDAOTest {
         requerente.setTelefonePrincipal("123456");
         requerente.setEmailPrincipal("andre@gmail.com");
         RequerenteDAO instance = new RequerenteDAO();
-        instance.save(requerente);
+        //instance.save(requerente);
     }
 
     /**
@@ -40,14 +40,14 @@ public class RequerenteDAOTest {
         System.out.println("update");
         Requerente requerente = new Requerente();
         requerente.setCategoriaJuridica("A1");
-        requerente.setNomeRequerente("André");
-        requerente.setSobrenomeRequerente("José");
+        requerente.setNomeRequerente("Marilia");
+        requerente.setSobrenomeRequerente("Bernardo");
         requerente.setTelefonePrincipal("123456");
         requerente.setTelefoneAlternativo("456789");
-        requerente.setEmailPrincipal("andre@gmail.com");
+        requerente.setEmailPrincipal("mari@gmail.com");
         requerente.setEmailAlternativo("123@hotmail.com");
-        requerente.setHomePage("www.andre.co.ao");
-        requerente.setIdRequerente(1);
+        requerente.setHomePage("www.marilia.co.ao");
+        requerente.setIdRequerente(2);
         RequerenteDAO instance = new RequerenteDAO();
         instance.update(requerente);
     }
@@ -59,7 +59,7 @@ public class RequerenteDAOTest {
     public void testDelete() {
         System.out.println("delete");
         Requerente requerente = new Requerente();
-        requerente.setIdRequerente(2);
+        requerente.setIdRequerente(3);
         RequerenteDAO instance = new RequerenteDAO();
         instance.delete(requerente);
     }

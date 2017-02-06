@@ -15,6 +15,7 @@ public class Provincia {
     private Pais paisProvincia;
 
     public Provincia() {
+        paisProvincia = new Pais();
     }
 
     public Provincia(Integer idProvincia, String nomeProvincia, Pais paisProvincia) {

@@ -15,6 +15,7 @@ public class Municipio {
     private Provincia provinciaMunicipio;
 
     public Municipio() {
+        provinciaMunicipio = new Provincia();
     }
 
     public Municipio(Integer idMunicipio, String nomeMunicipio, Provincia provinciaMunicipio) {

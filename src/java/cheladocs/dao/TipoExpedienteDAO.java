@@ -6,10 +6,15 @@
 package cheladocs.dao;
 
 import cheladocs.modelo.TipoExpediente;
+import cheladocs.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,33 +32,86 @@ public class TipoExpedienteDAO implements GenericoDAO<TipoExpediente>{
     private PreparedStatement ps;
 
     @Override
-    public void save(TipoExpediente t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void save(TipoExpediente tipoExpediente) {
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(INSERIR);
+            ps.setString(1, tipoExpediente.getTipoExpediente());
+            ps.executeUpdate();
+        }
+        catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
+        finally{ Conexao.closeConnection(conn, ps);}
     }
 
     @Override
-    public void update(TipoExpediente t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(TipoExpediente tipoExpediente) {
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(ACTUALIZAR);
+            ps.setString(1, tipoExpediente.getTipoExpediente());
+            ps.setInt(2, tipoExpediente.getIdTipoExpediente());
+            ps.executeUpdate();
+        }
+        catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
+        finally{ Conexao.closeConnection(conn, ps);}
     }
 
     @Override
-    public void delete(TipoExpediente t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(TipoExpediente tipoExpediente) {
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(ELIMINAR);
+            ps.setInt(1, tipoExpediente.getIdTipoExpediente());
+            ps.executeUpdate();
+        }
+        catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
+        finally{ Conexao.closeConnection(conn, ps);}
     }
 
     @Override
-    public TipoExpediente findById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public TipoExpediente findById(Integer idTipoExpediente) {
+        TipoExpediente tipoExpediente = null;
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_CODIGO);
+            ps.setInt(1, idTipoExpediente);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                tipoExpediente = new TipoExpediente();
+                popularComDados(tipoExpediente, rs);
+            }
+        }
+        catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return tipoExpediente;
     }
 
     @Override
     public List<TipoExpediente> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TipoExpediente tipoExpediente = null;
+        ArrayList<TipoExpediente> listaTipoExpediente = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(LISTAR_TUDO);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                tipoExpediente = new TipoExpediente();
+                popularComDados(tipoExpediente, rs);
+                listaTipoExpediente.add(tipoExpediente);
+            }
+        }
+        catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaTipoExpediente;
     }
 
     @Override
-    public void popularComDados(TipoExpediente t, ResultSet rs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void popularComDados(TipoExpediente tipoExpediente, ResultSet rs) {
+        try{
+            tipoExpediente.setIdTipoExpediente(rs.getInt("id_tipo_expediente"));
+            tipoExpediente.setTipoExpediente(rs.getString("tipo_expediente"));
+        }
+        catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
     }
     
 }

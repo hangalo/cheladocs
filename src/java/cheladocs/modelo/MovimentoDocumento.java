@@ -19,6 +19,11 @@ public class MovimentoDocumento {
     private String notas;
     private Documento documento;
 
+    public MovimentoDocumento(){
+        departamento = new Departamento();
+        documento = new Documento();
+    }
+    
     public int getIdMovimentoProgressivo() {
         return idMovimentoProgressivo;
     }

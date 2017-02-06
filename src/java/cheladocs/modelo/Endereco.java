@@ -19,6 +19,11 @@ public class Endereco {
     private Requerente requerente;
     private int flagActivo;
     private Municipio municipio;
+    
+    public Endereco(){
+        requerente = new Requerente();
+        municipio = new Municipio();
+    }
 
     public int getIdEndereco() {
         return idEndereco;
