@@ -79,16 +79,6 @@ public class DepartamentoDAOTest {
         assertTrue(result.size()>0);
     }
 
-    /**
-     * Test of popularComDados method, of class DepartamentoDAO.
-     *
-    @Test
-    public void testPopularComDados() {
-        System.out.println("popularComDados");
-        Departamento documento = null;
-        ResultSet rs = null;
-        DepartamentoDAO instance = new DepartamentoDAO();
-        instance.popularComDados(documento, rs);
-    }*/
+  
     
 }

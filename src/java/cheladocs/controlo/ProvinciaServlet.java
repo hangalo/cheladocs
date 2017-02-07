@@ -5,68 +5,84 @@
  */
 package cheladocs.controlo;
 
-import cheladocs.dao.ProvinciaDAO;
-import cheladocs.modelo.Provincia;
 import java.io.IOException;
-import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import cheladocs.dao.ProvinciaDAO;
+import cheladocs.modelo.Provincia;
 
 /**
  *
- * @author Adelino Eduardo
+ * @author informatica
  */
+@WebServlet(name = "ProvinciaServlet", urlPatterns = {"/provinciaServlet"})
 public class ProvinciaServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProvinciaDAO provDAO = new ProvinciaDAO();
-        
+
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, provDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, provDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, provDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, ProvinciaDAO provDAO) throws IOException{
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        ProvinciaDAO provinciaDAO;
         Provincia provincia = new Provincia();
-        provincia.setNomeProvincia(request.getParameter("nomeProvincia"));
-        provincia.getPaisProvincia().setIdPais(Integer.parseInt(request.getParameter("codigoPais")));
-        provDAO.save(provincia);
-        response.sendRedirect("ProvinciaInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, ProvinciaDAO provDAO) throws IOException{
-        Provincia provincia = new Provincia();
-        provincia.setNomeProvincia(request.getParameter("nomeProvincia"));
-        provincia.setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        provincia.getPaisProvincia().setIdPais(Integer.parseInt(request.getParameter("codigoPais")));
-        provDAO.update(provincia);
-        response.sendRedirect("ProvinciaListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, ProvinciaDAO provDAO) throws IOException{
-        Provincia provincia = new Provincia();
-        provincia.setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        provDAO.delete(provincia);
-        response.sendRedirect("ProvinciaListar.jsp");
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+
+            try {
+                String idProvincia = request.getParameter("id_provincia");
+                if (idProvincia != null) {
+                    provincia.setIdProvincia(Integer.parseInt(idProvincia));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            provinciaDAO = new ProvinciaDAO();
+
+            if (comando.equalsIgnoreCase("guardar")) {
+
+                provincia.setNomeProvincia(request.getParameter("nome_provincia"));
+                provinciaDAO.save(provincia);
+                response.sendRedirect("paginas/provincia_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("editar")) {
+                provincia.setIdProvincia(Integer.parseInt(request.getParameter("id_provincia")));
+                provincia.setNomeProvincia(request.getParameter("nome_provincia"));
+                provinciaDAO.update(provincia);
+                response.sendRedirect("paginas/provincia_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                provinciaDAO.delete(provincia);
+                response.sendRedirect("paginas/provincia_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                provincia = provinciaDAO.findById(provincia.getIdProvincia());
+                request.setAttribute("provincia", provincia);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/provincia_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/provincia_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
