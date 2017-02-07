@@ -8,6 +8,7 @@ package cheladocs.controlo;
 import cheladocs.dao.MunicipioDAO;
 import cheladocs.modelo.Municipio;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,42 +24,60 @@ public class MunicipioServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MunicipioDAO municipioDAO = new MunicipioDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, municipioDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, municipioDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, municipioDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, MunicipioDAO municipioDAO) throws IOException{
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        MunicipioDAO municipioDAO;
         Municipio municipio = new Municipio();
-        municipio.setNomeMunicipio(request.getParameter("nomeMunicipio"));
-        municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        municipioDAO.save(municipio);
-        response.sendRedirect("MunicipioInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, MunicipioDAO municipioDAO) throws IOException{
-        Municipio municipio = new Municipio();
-        municipio.setNomeMunicipio(request.getParameter("nomeMunicipio"));
-        municipio.setIdMunicipio(Integer.parseInt(request.getParameter("codigoMunicipio")));
-        municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        municipioDAO.update(municipio);
-        response.sendRedirect("MunicipioListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, MunicipioDAO municipioDAO) throws IOException{
-        Municipio municipio = new Municipio();
-        municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
-        municipioDAO.delete(municipio);
-        response.sendRedirect("MunicipioListar.jsp");
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idMunicipio = request.getParameter("id_municipio");
+                if (idMunicipio != null) {
+                    municipio.setIdMunicipio(Integer.parseInt(idMunicipio));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            municipioDAO = new MunicipioDAO();
+
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
+                municipio.setNomeMunicipio(request.getParameter("nomeMunicipio"));
+                municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
+                if (comando.equalsIgnoreCase("guardar")) {
+                    municipioDAO.save(municipio);
+                } else {
+                    municipioDAO.update(municipio);
+                }
+                response.sendRedirect("paginas/municipio_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                municipioDAO.delete(municipio);
+                response.sendRedirect("paginas/municipio_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                municipio = municipioDAO.findById(municipio.getIdMunicipio());
+                request.setAttribute("municipio", municipio);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/municipio_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/municipio_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

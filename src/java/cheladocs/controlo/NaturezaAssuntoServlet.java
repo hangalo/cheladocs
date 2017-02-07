@@ -9,6 +9,7 @@ import cheladocs.dao.NaturezaAssuntoDAO;
 import cheladocs.modelo.NaturezaAssunto;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,40 +32,62 @@ public class NaturezaAssuntoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        NaturezaAssuntoDAO naturezaAssuntoDAO = new NaturezaAssuntoDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, naturezaAssuntoDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, naturezaAssuntoDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, naturezaAssuntoDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, NaturezaAssuntoDAO naturezaAssuntoDAO) throws IOException{
-        NaturezaAssunto departamento = new NaturezaAssunto();
-        departamento.setNaturezaAssunto(request.getParameter("nomeNaturezaAssunto"));
-        naturezaAssuntoDAO.save(departamento);
-        response.sendRedirect("NaturezaAssuntoInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, NaturezaAssuntoDAO naturezaAssuntoDAO) throws IOException{
-        NaturezaAssunto departamento = new NaturezaAssunto();
-        departamento.setNaturezaAssunto(request.getParameter("nomeNaturezaAssunto"));
-        departamento.setIdNaturezaAssunto(Integer.parseInt(request.getParameter("codigoNaturezaAssunto")));
-        naturezaAssuntoDAO.update(departamento);
-        response.sendRedirect("NaturezaAssuntoListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, NaturezaAssuntoDAO naturezaAssuntoDAO) throws IOException{
-        NaturezaAssunto departamento = new NaturezaAssunto();
-        departamento.setIdNaturezaAssunto(Integer.parseInt(request.getParameter("codigoNaturezaAssunto")));
-        naturezaAssuntoDAO.delete(departamento);
-        response.sendRedirect("NaturezaAssuntoListar.jsp");
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        NaturezaAssuntoDAO naturezaAssuntoDAO;
+        NaturezaAssunto naturezaAssunto = new NaturezaAssunto();
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idNaturezaAssunto = request.getParameter("id_naturezaAssunto");
+                if (idNaturezaAssunto != null) {
+                    naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(idNaturezaAssunto));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            naturezaAssuntoDAO = new NaturezaAssuntoDAO();
+
+            if (comando.equalsIgnoreCase("guardar")) {
+
+                naturezaAssunto.setNaturezaAssunto(request.getParameter("nome_naturezaAssunto"));
+                naturezaAssuntoDAO.save(naturezaAssunto);
+                response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("editar")) {
+                //naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(request.getParameter("id_naturezaAssunto")));
+                naturezaAssunto.setNaturezaAssunto(request.getParameter("nome_naturezaAssunto"));
+                naturezaAssuntoDAO.update(naturezaAssunto);
+                response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                naturezaAssuntoDAO.delete(naturezaAssunto);
+                response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                naturezaAssunto = naturezaAssuntoDAO.findById(naturezaAssunto.getIdNaturezaAssunto());
+                request.setAttribute("naturezaAssunto", naturezaAssunto);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/naturezaAssunto_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

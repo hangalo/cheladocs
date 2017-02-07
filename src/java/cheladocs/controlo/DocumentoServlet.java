@@ -11,6 +11,7 @@ import cheladocs.util.DateUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,54 +34,66 @@ public class DocumentoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DocumentoDAO documentoDAO = new DocumentoDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, documentoDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, documentoDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, documentoDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, DocumentoDAO documentoDAO) throws IOException{
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        DocumentoDAO documentoDAO;
         Documento documento = new Documento();
-        documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("idRequerente")));
-        documento.setDataEntrada(new Date(DateUtil.strToDate(request.getParameter("dataEntrada")).getTime()));
-        documento.setOrigem(request.getParameter("origemDocumento"));
-        documento.setDescricaoAssunto(request.getParameter("descricaoAssunto"));
-        documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("idNaturezaAssunto")));
-        documento.getTipoExpediente().setIdTipoExpediente(Integer.parseInt(request.getParameter("tipoExpediente")));
-        documento.setUrlFicheiroDocumento(request.getParameter("urlFicheiroDocumento"));
-        documento.setConteudoDocumento(request.getParameter("conteudoDocumento"));        
-        documentoDAO.save(documento);
-        response.sendRedirect("DocumentoInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, DocumentoDAO documentoDAO) throws IOException{
-        Documento documento = new Documento();
-        documento.setNumeroProtocolo(Integer.parseInt(request.getParameter("numeroProtocolo")));
-        documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("idRequerente")));
-        documento.setDataEntrada(new Date(DateUtil.strToDate(request.getParameter("dataEntrada")).getTime()));
-        documento.setOrigem(request.getParameter("origemDocumento"));
-        documento.setDescricaoAssunto(request.getParameter("descricaoAssunto"));
-        documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("idNaturezaAssunto")));
-        documento.getTipoExpediente().setIdTipoExpediente(Integer.parseInt(request.getParameter("tipoExpediente")));
-        documento.setUrlFicheiroDocumento(request.getParameter("urlFicheiroDocumento"));
-        documento.setConteudoDocumento(request.getParameter("conteudoDocumento"));        
-        documentoDAO.save(documento);
-        response.sendRedirect("DocumentoListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, DocumentoDAO documentoDAO) throws IOException{
-        Documento documento = new Documento();
-        documento.setNumeroProtocolo(Integer.parseInt(request.getParameter("numeroProtocolo")));
-        documentoDAO.delete(documento);
-        response.sendRedirect("DocumentoListar.jsp");
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idDocumento = request.getParameter("id_documento");
+                if (idDocumento != null) {
+                    documento.setNumeroProtocolo(Integer.parseInt(idDocumento));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            documentoDAO = new DocumentoDAO();
+
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
+                documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("idRequerente")));
+                documento.setDataEntrada(new Date(DateUtil.strToDate(request.getParameter("dataEntrada")).getTime()));
+                documento.setOrigem(request.getParameter("origemDocumento"));
+                documento.setDescricaoAssunto(request.getParameter("descricaoAssunto"));
+                documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("idNaturezaAssunto")));
+                documento.getTipoExpediente().setIdTipoExpediente(Integer.parseInt(request.getParameter("tipoExpediente")));
+                documento.setUrlFicheiroDocumento(request.getParameter("urlFicheiroDocumento"));
+                documento.setConteudoDocumento(request.getParameter("conteudoDocumento"));
+                
+                if(comando.equalsIgnoreCase("guardar"))
+                    documentoDAO.save(documento);
+                else
+                    documentoDAO.update(documento);
+                response.sendRedirect("paginas/documento_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                documentoDAO.delete(documento);
+                response.sendRedirect("paginas/documento_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                documento = documentoDAO.findById(documento.getNumeroProtocolo());
+                request.setAttribute("documento", documento);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/documento_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/documento_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

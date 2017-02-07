@@ -9,6 +9,7 @@ import cheladocs.dao.RequerenteDAO;
 import cheladocs.modelo.Requerente;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,55 +32,68 @@ public class RequerenteServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequerenteDAO requerenteDAO = new RequerenteDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, requerenteDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, requerenteDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, requerenteDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, RequerenteDAO requerenteDAO) throws IOException{
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        RequerenteDAO requerenteDAO;
         Requerente requerente = new Requerente();
-        requerente.setCategoriaJuridica(request.getParameter("categoriaJuridica"));
-        requerente.setNomeRequerente(request.getParameter("nomeRequerente"));
-        requerente.setSobrenomeRequerente(request.getParameter("sobrenomeRequerente"));
-        requerente.setTelefonePrincipal(request.getParameter("telefonePrincipal"));
-        requerente.setTelefoneAlternativo(request.getParameter("telefoneAlternativo"));
-        requerente.setEmailPrincipal(request.getParameter("emailPrincipal"));
-        requerente.setEmailAlternativo(request.getParameter("emailAlternativo"));
-        requerente.setHomePage(request.getParameter("homePage"));        
-        requerenteDAO.save(requerente);
-        response.sendRedirect("RequerenteInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, RequerenteDAO requerenteDAO) throws IOException{
-        Requerente requerente = new Requerente();
-        requerente.setIdRequerente(Integer.parseInt(request.getParameter("idRequerente")));
-        requerente.setCategoriaJuridica(request.getParameter("categoriaJuridica"));
-        requerente.setNomeRequerente(request.getParameter("nomeRequerente"));
-        requerente.setSobrenomeRequerente(request.getParameter("sobrenomeRequerente"));
-        requerente.setTelefonePrincipal(request.getParameter("telefonePrincipal"));
-        requerente.setTelefoneAlternativo(request.getParameter("telefoneAlternativo"));
-        requerente.setEmailPrincipal(request.getParameter("emailPrincipal"));
-        requerente.setEmailAlternativo(request.getParameter("emailAlternativo"));
-        requerente.setHomePage(request.getParameter("homePage"));
-        requerente.setIdRequerente(Integer.parseInt(request.getParameter("codigoRequerente")));
-        requerenteDAO.update(requerente);
-        response.sendRedirect("RequerenteListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, RequerenteDAO requerenteDAO) throws IOException{
-        Requerente requerente = new Requerente();
-        requerente.setIdRequerente(Integer.parseInt(request.getParameter("idRequerente")));
-        requerenteDAO.delete(requerente);
-        response.sendRedirect("RequerenteListar.jsp");
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idRequerente = request.getParameter("id_requerente");
+                if (idRequerente != null) {
+                    requerente.setIdRequerente(Integer.parseInt(idRequerente));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            requerenteDAO = new RequerenteDAO();
+
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
+
+                requerente.setCategoriaJuridica(request.getParameter("categoria_Juridica"));
+                requerente.setNomeRequerente(request.getParameter("nome_Requerente"));
+                requerente.setSobrenomeRequerente(request.getParameter("sobrenome_Requerente"));
+                requerente.setTelefonePrincipal(request.getParameter("telefone_Principal"));
+                requerente.setTelefoneAlternativo(request.getParameter("telefone_Alternativo"));
+                requerente.setEmailPrincipal(request.getParameter("email_Principal"));
+                requerente.setEmailAlternativo(request.getParameter("email_Alternativo"));
+                requerente.setHomePage(request.getParameter("home_Page"));
+                
+                if (comando.equalsIgnoreCase("guardar"))
+                    requerenteDAO.save(requerente);
+                else
+                    requerenteDAO.update(requerente);
+            
+                response.sendRedirect("paginas/requerente_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                requerenteDAO.delete(requerente);
+                response.sendRedirect("paginas/requerente_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                requerente = requerenteDAO.findById(requerente.getIdRequerente());
+                request.setAttribute("requerente", requerente);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/requerente_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/requerente_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

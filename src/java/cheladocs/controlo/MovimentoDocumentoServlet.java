@@ -11,6 +11,7 @@ import cheladocs.util.DateUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,48 +34,62 @@ public class MovimentoDocumentoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MovimentoDocumentoDAO mDocumentoDAO = new MovimentoDocumentoDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, mDocumentoDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, mDocumentoDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, mDocumentoDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, MovimentoDocumentoDAO mDocumentoDAO) throws IOException{
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        MovimentoDocumentoDAO mDocumentoDAO;
         MovimentoDocumento mDocumento = new MovimentoDocumento();
-        mDocumento.setDataRecepcao(new Date(DateUtil.strToDate(request.getParameter("dataRecepcao")).getTime()));
-        mDocumento.setDataReenvio(new Date(DateUtil.strToDate(request.getParameter("dataReenvio")).getTime()));
-        mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("idDepartamento")));
-        mDocumento.setNotas(request.getParameter("notas"));
-        mDocumento.getDocumento().setNumeroProtocolo(Integer.parseInt(request.getParameter("documento")));
-        mDocumentoDAO.save(mDocumento);
-        response.sendRedirect("MovimentoDocumentoInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, MovimentoDocumentoDAO mDocumentoDAO) throws IOException{
-        MovimentoDocumento mDocumento = new MovimentoDocumento();
-        mDocumento.setDataRecepcao(new Date(DateUtil.strToDate(request.getParameter("dataRecepcao")).getTime()));
-        mDocumento.setDataReenvio(new Date(DateUtil.strToDate(request.getParameter("dataReenvio")).getTime()));
-        mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("idDepartamento")));
-        mDocumento.setNotas(request.getParameter("notas"));
-        mDocumento.getDocumento().setNumeroProtocolo(Integer.parseInt(request.getParameter("documento")));
-        mDocumento.setIdMovimentoProgressivo(Integer.parseInt(request.getParameter("idMovimentoProgressivo")));
-        mDocumentoDAO.save(mDocumento);
-        response.sendRedirect("MovimentoDocumentoListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, MovimentoDocumentoDAO mDocumentoDAO) throws IOException{
-        MovimentoDocumento mDocumento = new MovimentoDocumento();
-        mDocumento.setIdMovimentoProgressivo(Integer.parseInt(request.getParameter("idMovimentoProgressivo")));
-        mDocumentoDAO.delete(mDocumento);
-        response.sendRedirect("MovimentoDocumentoListar.jsp");
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idMovimentoDocumento = request.getParameter("id_mDocumento");
+                if (idMovimentoDocumento != null) {
+                    mDocumento.setIdMovimentoProgressivo(Integer.parseInt(idMovimentoDocumento));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            mDocumentoDAO = new MovimentoDocumentoDAO();
+
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
+                mDocumento.setDataRecepcao(new Date(DateUtil.strToDate(request.getParameter("dataRecepcao")).getTime()));
+                mDocumento.setDataReenvio(new Date(DateUtil.strToDate(request.getParameter("dataReenvio")).getTime()));
+                mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("idDepartamento")));
+                mDocumento.setNotas(request.getParameter("notas"));
+                mDocumento.getDocumento().setNumeroProtocolo(Integer.parseInt(request.getParameter("documento")));
+                if (comando.equalsIgnoreCase("guardar"))
+                    mDocumentoDAO.save(mDocumento);
+                else
+                    mDocumentoDAO.update(mDocumento);
+                response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+                
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                mDocumentoDAO.delete(mDocumento);
+                response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                mDocumento = mDocumentoDAO.findById(mDocumento.getIdMovimentoProgressivo());
+                request.setAttribute("mDocumento", mDocumento);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/movimentoDocumento_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

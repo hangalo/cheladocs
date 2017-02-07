@@ -51,16 +51,13 @@ public class ProvinciaServlet extends HttpServlet {
 
             provinciaDAO = new ProvinciaDAO();
 
-            if (comando.equalsIgnoreCase("guardar")) {
-
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
                 provincia.setNomeProvincia(request.getParameter("nome_provincia"));
-                provinciaDAO.save(provincia);
-                response.sendRedirect("paginas/provincia_listar.jsp");
-
-            } else if (comando.equalsIgnoreCase("editar")) {
-                provincia.setIdProvincia(Integer.parseInt(request.getParameter("id_provincia")));
-                provincia.setNomeProvincia(request.getParameter("nome_provincia"));
-                provinciaDAO.update(provincia);
+                provincia.getPaisProvincia().setIdPais(Integer.parseInt(request.getParameter("id_provincia")));
+                if (comando.equalsIgnoreCase("guardar"))
+                    provinciaDAO.save(provincia);
+                else if (comando.equalsIgnoreCase("editar"))
+                    provinciaDAO.update(provincia);
                 response.sendRedirect("paginas/provincia_listar.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {

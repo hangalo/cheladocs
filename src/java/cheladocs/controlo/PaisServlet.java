@@ -9,6 +9,7 @@ import cheladocs.dao.PaisDAO;
 import cheladocs.modelo.Pais;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,39 +35,62 @@ public class PaisServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        PaisDAO paisDAO = new PaisDAO();
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, paisDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, paisDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, paisDAO);
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        PaisDAO paisDAO;
+        Pais pais = new Pais();
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idPais = request.getParameter("id_pais");
+                if (idPais != null) {
+                    pais.setIdPais(Integer.parseInt(idPais));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            paisDAO = new PaisDAO();
+
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
+
+                pais.setNomePais(request.getParameter("nome_pais"));
+                
+                if(comando.equalsIgnoreCase("guardar"))
+                    paisDAO.save(pais);
+                else
+                    paisDAO.update(pais);
+                response.sendRedirect("paginas/pais_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                paisDAO.delete(pais);
+                response.sendRedirect("paginas/pais_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                pais = paisDAO.findById(pais.getIdPais());
+                request.setAttribute("pais", pais);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/pais_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/pais_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
     
-    private void salvar(HttpServletRequest request, HttpServletResponse response, PaisDAO paisDAO) throws IOException{
-        Pais pais = new Pais();
-        pais.setNomePais(request.getParameter("nomePais"));
-        paisDAO.save(pais);
-        response.sendRedirect("PaisInserir.jsp");
-    }
     
-    private void update(HttpServletRequest request, HttpServletResponse response, PaisDAO paisDAO) throws IOException{
-        Pais pais = new Pais();
-        pais.setNomePais(request.getParameter("nomePais"));
-        pais.setIdPais(Integer.parseInt(request.getParameter("codigoPais")));
-        paisDAO.update(pais);
-        response.sendRedirect("PaisListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, PaisDAO paisDAO) throws IOException{
-        Pais pais = new Pais();
-        pais.setIdPais(Integer.parseInt(request.getParameter("codigoPais")));
-        paisDAO.delete(pais);
-        response.sendRedirect("PaisListar.jsp");
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

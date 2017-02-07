@@ -9,6 +9,7 @@ import cheladocs.dao.DepartamentoDAO;
 import cheladocs.modelo.Departamento;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,40 +32,62 @@ public class DepartamentoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, departamentoDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, departamentoDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, departamentoDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, DepartamentoDAO departamentoDAO) throws IOException{
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        DepartamentoDAO departamentoDAO;
         Departamento departamento = new Departamento();
-        departamento.setDepartamento(request.getParameter("nomeDepartamento"));
-        departamentoDAO.save(departamento);
-        response.sendRedirect("DepartamentoInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, DepartamentoDAO departamentoDAO) throws IOException{
-        Departamento departamento = new Departamento();
-        departamento.setDepartamento(request.getParameter("nomeDepartamento"));
-        departamento.setIdDepartamento(Integer.parseInt(request.getParameter("codigoDepartamento")));
-        departamentoDAO.update(departamento);
-        response.sendRedirect("DepartamentoListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, DepartamentoDAO departamentoDAO) throws IOException{
-        Departamento departamento = new Departamento();
-        departamento.setIdDepartamento(Integer.parseInt(request.getParameter("codigoDepartamento")));
-        departamentoDAO.delete(departamento);
-        response.sendRedirect("DepartamentoListar.jsp");
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idDepartamento = request.getParameter("id_departamento");
+                if (idDepartamento != null) {
+                    departamento.setIdDepartamento(Integer.parseInt(idDepartamento));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            departamentoDAO = new DepartamentoDAO();
+
+            if (comando.equalsIgnoreCase("guardar")) {
+
+                departamento.setDepartamento(request.getParameter("nome_departamento"));
+                departamentoDAO.save(departamento);
+                response.sendRedirect("paginas/departamento_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("editar")) {
+                //departamento.setIdDepartamento(Integer.parseInt(request.getParameter("id_departamento")));
+                departamento.setDepartamento(request.getParameter("nome_departamento"));
+                departamentoDAO.update(departamento);
+                response.sendRedirect("paginas/departamento_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                departamentoDAO.delete(departamento);
+                response.sendRedirect("paginas/departamento_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                departamento = departamentoDAO.findById(departamento.getIdDepartamento());
+                request.setAttribute("departamento", departamento);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/departamento_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/departamento_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

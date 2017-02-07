@@ -9,6 +9,7 @@ import cheladocs.dao.TipoExpedienteDAO;
 import cheladocs.modelo.TipoExpediente;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,40 +32,59 @@ public class TipoExpedienteServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        TipoExpedienteDAO tipoExpedienteDAO = new TipoExpedienteDAO();
-        
         String comando = request.getParameter("comando");
-        
-        if (comando == null) comando = "salvar";
-        
-        if (comando.equalsIgnoreCase("salvar"))
-            salvar(request, response, tipoExpedienteDAO);
-        else if (comando.equalsIgnoreCase("update"))
-            update(request, response, tipoExpedienteDAO);
-        else if (comando.equalsIgnoreCase("delete"))
-            delete(request, response, tipoExpedienteDAO);
-    }
-    
-    private void salvar(HttpServletRequest request, HttpServletResponse response, TipoExpedienteDAO tipoExpedienteDAO) throws IOException{
-        TipoExpediente departamento = new TipoExpediente();
-        departamento.setTipoExpediente(request.getParameter("tipoExpediente"));
-        tipoExpedienteDAO.save(departamento);
-        response.sendRedirect("TipoExpedienteInserir.jsp");
-    }
-    
-    private void update(HttpServletRequest request, HttpServletResponse response, TipoExpedienteDAO tipoExpedienteDAO) throws IOException{
-        TipoExpediente departamento = new TipoExpediente();
-        departamento.setTipoExpediente(request.getParameter("tipoExpediente"));
-        departamento.setIdTipoExpediente(Integer.parseInt(request.getParameter("codigoTipoExpediente")));
-        tipoExpedienteDAO.update(departamento);
-        response.sendRedirect("TipoExpedienteListar.jsp");
-    }
-    
-    private void delete(HttpServletRequest request, HttpServletResponse response, TipoExpedienteDAO tipoExpedienteDAO) throws IOException{
-        TipoExpediente departamento = new TipoExpediente();
-        departamento.setIdTipoExpediente(Integer.parseInt(request.getParameter("codigoTipoExpediente")));
-        tipoExpedienteDAO.delete(departamento);
-        response.sendRedirect("TipoExpedienteListar.jsp");
+
+        if (comando == null) {
+            comando = "principal";
+        }
+
+        TipoExpedienteDAO tipoExpedienteDAO;
+        TipoExpediente tipoExpediente = new TipoExpediente();
+
+        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+            try {
+                String idTipoExpediente = request.getParameter("id_tipoExpediente");
+                if (idTipoExpediente != null) {
+                    tipoExpediente.setIdTipoExpediente(Integer.parseInt(idTipoExpediente));
+                }
+
+            } catch (NumberFormatException ex) {
+                System.err.println("Erro ao converter dado: " + ex.getMessage());
+            }
+        }
+
+        try {
+
+            tipoExpedienteDAO = new TipoExpedienteDAO();
+
+            if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
+                tipoExpediente.setTipoExpediente(request.getParameter("tipo_expediente"));
+                
+                if (comando.equalsIgnoreCase("guardar"))
+                    tipoExpedienteDAO.save(tipoExpediente);
+                else
+                    tipoExpedienteDAO.update(tipoExpediente);
+                response.sendRedirect("paginas/tipoExpediente_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("eliminar")) {
+                tipoExpedienteDAO.delete(tipoExpediente);
+                response.sendRedirect("paginas/tipoExpediente_listar.jsp");
+
+            } else if (comando.equalsIgnoreCase("prepara_editar")) {
+                tipoExpediente = tipoExpedienteDAO.findById(tipoExpediente.getIdTipoExpediente());
+                request.setAttribute("tipoExpediente", tipoExpediente);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/tipoExpediente_editar.jsp");
+                rd.forward(request, response);
+            } else if (comando.equalsIgnoreCase("listar")) {
+
+                response.sendRedirect("paginas/tipoExpediente_listar.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
+                response.sendRedirect("/index.jsp");
+            }
+
+        } catch (IOException | ServletException ex) {
+            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
