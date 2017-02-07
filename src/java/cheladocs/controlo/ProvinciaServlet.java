@@ -54,6 +54,7 @@ public class ProvinciaServlet extends HttpServlet {
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
                 provincia.setNomeProvincia(request.getParameter("nome_provincia"));
                 provincia.getPaisProvincia().setIdPais(Integer.parseInt(request.getParameter("id_provincia")));
+                
                 if (comando.equalsIgnoreCase("guardar"))
                     provinciaDAO.save(provincia);
                 else if (comando.equalsIgnoreCase("editar"))

@@ -52,6 +52,7 @@ public class MunicipioServlet extends HttpServlet {
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
                 municipio.setNomeMunicipio(request.getParameter("nomeMunicipio"));
                 municipio.getProvinciaMunicipio().setIdProvincia(Integer.parseInt(request.getParameter("codigoProvincia")));
+                
                 if (comando.equalsIgnoreCase("guardar")) {
                     municipioDAO.save(municipio);
                 } else {

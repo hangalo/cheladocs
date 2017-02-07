@@ -9,7 +9,6 @@ import cheladocs.dao.DocumentoDAO;
 import cheladocs.modelo.Documento;
 import cheladocs.util.DateUtil;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
