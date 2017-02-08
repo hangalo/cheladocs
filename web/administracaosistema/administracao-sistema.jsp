@@ -60,8 +60,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Geral</div>
                     <div class="panel-body">
-                        <a href="#" class="btn btn-info" role="button">Municipios</a>
+                        <a href="../paginas/municipio_listar.jsp" class="btn btn-info" role="button">Municipios</a>
                         <a href="#" class="btn btn-info" role="button">Profissôes</a>
+                        <a href="../paginas/departamento_listar.jsp" class="btn btn-info" role="button">Departamentos</a>
                     </div>
                 </div>
 

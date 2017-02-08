@@ -27,6 +27,7 @@ public class MunicipioDAOTest {
         System.out.println("save");
         Municipio municipio = new Municipio();
         municipio.setNomeMunicipio("Luanda");
+         municipio.setNomeMunicipio("Bengo");
         municipio.getProvinciaMunicipio().setIdProvincia(1);
         MunicipioDAO instance = new MunicipioDAO();
         instance.save(municipio);
@@ -67,7 +68,7 @@ public class MunicipioDAOTest {
         Integer idMunicipio = 1;
         MunicipioDAO instance = new MunicipioDAO();
         Municipio result = instance.findById(idMunicipio);
-        assertTrue(result != null);
+        assertTrue(result!= null);
     }
 
     /**

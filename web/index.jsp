@@ -42,7 +42,7 @@
             </div>
         </div>
 <div class="jumbotron text-center">
-     <a href="paginas/Menu.jsp" class="btn btn-info" role="button">Menu</a>
+     
             <h3>Cheladocs - Sistema de gestão expediente e documentos</h3>
             <a href="administracaosistema/administracao-sistema.jsp" class="btn btn-info" role="button">Entrar</a>
         </div>
