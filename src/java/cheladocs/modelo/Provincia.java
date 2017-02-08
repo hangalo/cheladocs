@@ -48,5 +48,10 @@ public class Provincia {
         this.paisProvincia = paisProvincia;
     }
 
+    @Override
+    public String toString() {
+        return this.nomeProvincia;
+    }
+
    
 }
