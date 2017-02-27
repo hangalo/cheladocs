@@ -111,10 +111,10 @@ public class DepartamentoDAO implements GenericoDAO<Departamento>{
     }
 
     @Override
-    public void popularComDados(Departamento documento, ResultSet rs) {
+    public void popularComDados(Departamento departamento, ResultSet rs) {
         try {
-            documento.setIdDepartamento(rs.getInt("id_departamento"));
-            documento.setDepartamento(rs.getString("departamento"));
+            departamento.setIdDepartamento(rs.getInt("id_departamento"));
+            departamento.setDepartamento(rs.getString("departamento"));
         } catch (SQLException ex) {
             Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

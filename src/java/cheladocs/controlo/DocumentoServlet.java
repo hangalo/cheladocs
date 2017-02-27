@@ -7,20 +7,37 @@ package cheladocs.controlo;
 
 import cheladocs.dao.DocumentoDAO;
 import cheladocs.modelo.Documento;
-import cheladocs.util.DateUtil;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
+import java.util.Calendar;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
  * @author Adelino Eduardo
  */
+@MultipartConfig
 public class DocumentoServlet extends HttpServlet {
+
+    private String PASTA_DOC = null;
+
+    @Override
+    public void init() throws ServletException {
+        super.init(); //To change body of generated methods, choose Tools | Templates.
+        PASTA_DOC = getServletContext().getInitParameter("PastaArquivos");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,7 +61,7 @@ public class DocumentoServlet extends HttpServlet {
 
         if (comando == null || !comando.equalsIgnoreCase("principal")) {
             try {
-                String idDocumento = request.getParameter("id_documento");
+                String idDocumento = request.getParameter("numero_protocolo");
                 if (idDocumento != null) {
                     documento.setNumeroProtocolo(Integer.parseInt(idDocumento));
                 }
@@ -59,19 +76,52 @@ public class DocumentoServlet extends HttpServlet {
             documentoDAO = new DocumentoDAO();
 
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
-                documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("idRequerente")));
-                documento.setDataEntrada(new Date(DateUtil.strToDate(request.getParameter("dataEntrada")).getTime()));
-                documento.setOrigem(request.getParameter("origemDocumento"));
-                documento.setDescricaoAssunto(request.getParameter("descricaoAssunto"));
-                documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("idNaturezaAssunto")));
-                documento.getTipoExpediente().setIdTipoExpediente(Integer.parseInt(request.getParameter("tipoExpediente")));
-                documento.setUrlFicheiroDocumento(request.getParameter("urlFicheiroDocumento"));
-                documento.setConteudoDocumento(request.getParameter("conteudoDocumento"));
+                documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("requerente")));
+                documento.setDataEntrada(new Date(Calendar.getInstance().getTime().getTime()));
+                documento.setOrigem(request.getParameter("origem_documento"));
+                documento.setDescricaoAssunto(request.getParameter("descricao_assunto"));
+                documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("natureza_assunto")));
+                documento.getTipoExpediente().setIdTipoExpediente(Integer.parseInt(request.getParameter("tipo_expediente")));
                 
-                if(comando.equalsIgnoreCase("guardar"))
+                //Pegar a pasta do projecto
+                String pastaProjecto = getServletContext().getRealPath("");
+
+                //Definir caminho completo da pasta dos arquivos
+                String caminhoCompleto = pastaProjecto + File.separator + "imagens" + File.separator + PASTA_DOC;
+                System.out.println("Salvar em: " + caminhoCompleto);
+                
+                //Pegar o arquivo selecionado
+                Part ficheiro = request.getPart("ficheiro");
+                System.out.println("Nome arquivo: " + ficheiro.getSubmittedFileName());
+
+                InputStream in = ficheiro.getInputStream();
+
+                File file = new File(caminhoCompleto + "\\" + ficheiro.getSubmittedFileName());
+                file.createNewFile();
+                FileOutputStream out = new FileOutputStream(file);
+
+                byte[] buffer = new byte[1024 * 1024 * 100];
+
+                int length;
+
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+                out.close();
+                in.close();
+
+                //Conteudo para a o campo ficheiro da tabela aluno. Carrega uma string com o nome e extensao do ficheiro
+                documento.setUrlFicheiroDocumento(ficheiro.getSubmittedFileName());
+
+                //Conteudo em byte do ficheiro. Guarda o conteudo em bytes num campo da tabela.            
+                byte[] content = IOUtils.toByteArray(ficheiro.getInputStream());
+                documento.setConteudoDocumento(new String(content));
+
+                if (comando.equalsIgnoreCase("guardar")) {
                     documentoDAO.save(documento);
-                else
+                } else {
                     documentoDAO.update(documento);
+                }
                 response.sendRedirect("paginas/documento_listar.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
@@ -81,7 +131,7 @@ public class DocumentoServlet extends HttpServlet {
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 documento = documentoDAO.findById(documento.getNumeroProtocolo());
                 request.setAttribute("documento", documento);
-                RequestDispatcher rd = request.getRequestDispatcher("/paginas/documento_editar.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("paginas/documento_editar.jsp");
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
@@ -91,7 +141,8 @@ public class DocumentoServlet extends HttpServlet {
             }
 
         } catch (IOException | ServletException ex) {
-            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+            //System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 

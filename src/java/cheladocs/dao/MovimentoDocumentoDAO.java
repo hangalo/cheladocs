@@ -8,6 +8,7 @@ package cheladocs.dao;
 import cheladocs.modelo.MovimentoDocumento;
 import cheladocs.util.Conexao;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,19 +21,26 @@ import java.util.logging.Logger;
  *
  * @author Adelino Eduardo
  */
-public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
-    
+public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
+
     private static final String INSERIR = "insert into movimento_documento (data_recepcao,data_reenvio,id_departamento,notas,numero_protocolo) values (?,?,?,?,?)";
+
     private static final String ACTUALIZAR = "update movimento_documento set data_recepcao = ?, data_reenvio = ?, id_departamento = ?, notas = ?, "
-                                           + "numero_protocolo = ? where id_movimento_progressivo = ?";
+            + "numero_protocolo = ? where id_movimento_progressivo = ?";
+
     private static final String ELIMINAR = "delete from movimento_documento where id_movimento_progressivo = ?";
-    private static final String BUSCAR_POR_CODIGO = "select * from movimento_documento where id_movimento_progressivo = ?";
-    private static final String LISTAR_TUDO = "select * from movimento_documento";
+
+    private static final String LISTAR_TUDO = "select id_movimento_progressivo, data_recepcao, data_reenvio, dep.id_departamento, departamento, notas, doc.numero_protocolo,"
+                                            + " descricao_assunto, origem from movimento_documento as MD "
+                                            + " INNER JOIN documento as doc ON MD.numero_protocolo = doc.numero_protocolo "
+                                            + " INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento";
+
+    private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where id_movimento_progressivo = ?";
 
     private Connection conn;
     private ResultSet rs;
     private PreparedStatement ps;
-    
+
     private DepartamentoDAO depDAO = new DepartamentoDAO();
     private DocumentoDAO docDAO = new DocumentoDAO();
 
@@ -49,8 +57,9 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(MovimentoDocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps);
         }
-        finally{ Conexao.closeConnection(conn, ps); }
     }
 
     @Override
@@ -67,8 +76,9 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(MovimentoDocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps);
         }
-        finally{ Conexao.closeConnection(conn, ps); }
     }
 
     @Override
@@ -80,8 +90,9 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(MovimentoDocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps);
         }
-        finally{ Conexao.closeConnection(conn, ps); }
     }
 
     @Override
@@ -92,13 +103,14 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
             ps = conn.prepareStatement(BUSCAR_POR_CODIGO);
             ps.setInt(1, idMovimentoDocumento);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 popularComDados(mDocumento, rs);
             }
         } catch (SQLException ex) {
             Logger.getLogger(RequerenteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps, rs);
         }
-        finally{ Conexao.closeConnection(conn, ps, rs); }
         return mDocumento;
     }
 
@@ -110,14 +122,16 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(LISTAR_TUDO);
             rs = ps.executeQuery();
-            if(rs.next()){
+            while (rs.next()) {
                 mDocumento = new MovimentoDocumento();
                 popularComDados(mDocumento, rs);
+                listaDocumento.add(mDocumento);
             }
         } catch (SQLException ex) {
             Logger.getLogger(RequerenteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps, rs);
         }
-        finally{ Conexao.closeConnection(conn, ps, rs); }
         return listaDocumento;
     }
 
@@ -126,13 +140,22 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento>{
         try {
             mDocumento.setDataRecepcao(rs.getDate("data_recepcao"));
             mDocumento.setDataReenvio(rs.getDate("data_reenvio"));
-            mDocumento.setDepartamento(depDAO.findById(rs.getInt("id_departamento")));
+            mDocumento.getDepartamento().setIdDepartamento(rs.getInt("id_departamento"));
+            mDocumento.getDepartamento().setDepartamento(rs.getString("departamento"));
             mDocumento.setIdMovimentoProgressivo(rs.getInt("id_movimento_progressivo"));
             mDocumento.setNotas(rs.getString("notas"));
-            mDocumento.setDocumento(docDAO.findById(rs.getInt("numero_protocolo")));                    
+            mDocumento.getDocumento().setNumeroProtocolo(rs.getInt("numero_protocolo"));
+            mDocumento.getDocumento().setDescricaoAssunto(rs.getString("descricao_assunto"));
+            mDocumento.getDocumento().setOrigem(rs.getString("origem"));
         } catch (SQLException ex) {
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /*
+    select id_movimento_progressivo, data_recepcao, data_reenvio, dep.id_departamento, departamento, notas, doc.numero_protocolo,
+    descricao_assunto, origem, from movimento_documento as MD 
+    INNER JOIN documento as doc ON MD.numero_protocolo = doc.numero_protocolo
+    INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento
+     */
 }

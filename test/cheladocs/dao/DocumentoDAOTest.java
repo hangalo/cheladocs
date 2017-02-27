@@ -35,7 +35,7 @@ public class DocumentoDAOTest {
         documento.setOrigem("O1");
         documento.getRequerente().setIdRequerente(1);
         documento.getTipoExpediente().setIdTipoExpediente(1);
-        documento.setUrlFicheiroDocumento("aaa");
+        //documento.setUrlFicheiroDocumento("aaa");
         DocumentoDAO instance = new DocumentoDAO();
         instance.save(documento);
     }
@@ -54,10 +54,10 @@ public class DocumentoDAOTest {
         documento.setOrigem("O1");
         documento.getRequerente().setIdRequerente(1);
         documento.getTipoExpediente().setIdTipoExpediente(1);
-        documento.setUrlFicheiroDocumento("aaa");
+        //documento.setUrlFicheiroDocumento("aaa");
         documento.setNumeroProtocolo(2);
         DocumentoDAO instance = new DocumentoDAO();
-        //instance.update(documento);
+        instance.update(documento);
     }
 
     /**
@@ -69,7 +69,7 @@ public class DocumentoDAOTest {
         Documento documento = new Documento();
         documento.setNumeroProtocolo(3);
         DocumentoDAO instance = new DocumentoDAO();
-        //instance.delete(documento);
+        instance.delete(documento);
     }
 
     /**

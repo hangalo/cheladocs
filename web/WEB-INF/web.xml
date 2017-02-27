@@ -77,4 +77,9 @@
             30
         </session-timeout>
     </session-config>
+    <context-param>
+        <description>> Pasta dos Arquivos</description>
+        <param-name>PastaArquivos</param-name>
+        <param-value>PASTA_ARQUIVOS</param-value>
+    </context-param>
 </web-app>

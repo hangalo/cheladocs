@@ -42,7 +42,7 @@ public class NaturezaAssuntoServlet extends HttpServlet {
 
         if (comando == null || !comando.equalsIgnoreCase("principal")) {
             try {
-                String idNaturezaAssunto = request.getParameter("id_naturezaAssunto");
+                String idNaturezaAssunto = request.getParameter("id_natureza_assunto");
                 if (idNaturezaAssunto != null) {
                     naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(idNaturezaAssunto));
                 }
@@ -58,13 +58,14 @@ public class NaturezaAssuntoServlet extends HttpServlet {
 
             if (comando.equalsIgnoreCase("guardar")) {
 
-                naturezaAssunto.setNaturezaAssunto(request.getParameter("nome_naturezaAssunto"));
+                naturezaAssunto.setNaturezaAssunto(request.getParameter("natureza_assunto"));
                 naturezaAssuntoDAO.save(naturezaAssunto);
                 response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
 
             } else if (comando.equalsIgnoreCase("editar")) {
-                //naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(request.getParameter("id_naturezaAssunto")));
-                naturezaAssunto.setNaturezaAssunto(request.getParameter("nome_naturezaAssunto"));
+                naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(request.getParameter("id_natureza_assunto")));
+                naturezaAssunto.setNaturezaAssunto(request.getParameter("natureza_assunto"));
+                 System.out.println("NA: " + naturezaAssunto.getNaturezaAssunto());
                 naturezaAssuntoDAO.update(naturezaAssunto);
                 response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
 
@@ -75,12 +76,12 @@ public class NaturezaAssuntoServlet extends HttpServlet {
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 naturezaAssunto = naturezaAssuntoDAO.findById(naturezaAssunto.getIdNaturezaAssunto());
                 request.setAttribute("naturezaAssunto", naturezaAssunto);
-                RequestDispatcher rd = request.getRequestDispatcher("/paginas/naturezaAssunto_editar.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("paginas/naturezaAssunto_editar.jsp");
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
                 response.sendRedirect("paginas/naturezaAssunto_listar.jsp");
-            } else if (comando.equalsIgnoreCase("principla")) {
+            } else if (comando.equalsIgnoreCase("principal")) {
                 response.sendRedirect("/index.jsp");
             }
 

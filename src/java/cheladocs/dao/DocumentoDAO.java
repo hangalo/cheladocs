@@ -6,7 +6,6 @@
 package cheladocs.dao;
 
 import cheladocs.modelo.Documento;
-import cheladocs.modelo.TipoExpediente;
 import cheladocs.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,13 +23,22 @@ import java.util.logging.Logger;
 public class DocumentoDAO implements GenericoDAO<Documento>{
     private static final String INSERIR = "insert into documento (id_requerente,data_entrada,origem,descricao_assunto,id_natureza_assunto,"
                                         + "id_tipo_expediente,url_ficheiro_documento,conteudo_documento) values (?,?,?,?,?,?,?,?)";
+    
     private static final String ACTUALIZAR = "update documento set id_requerente = ?,data_entrada = ?,origem = ?,descricao_assunto = ?,"
                                            + "id_natureza_assunto = ?,id_tipo_expediente = ?,url_ficheiro_documento = ?,conteudo_documento = ? "
                                            + "where numero_protocolo = ?";
+    
     private static final String ELIMINAR = "delete from documento where numero_protocolo = ?";
-    private static final String BUSCAR_POR_CODIGO = "select * from documento where numero_protocolo = ?";
-    private static final String LISTAR_TUDO = "select * from documento";
-
+    
+    private static final String LISTAR_TUDO = "select numero_protocolo, data_entrada, origem, descricao_assunto, NA.id_natureza_assunto, natureza_assunto, "
+                                            + "TE.id_tipo_expediente, tipo_expediente, url_ficheiro_documento, conteudo_documento, R.id_requerente, "
+                                            + "nome_requerente, sobrenome_requerente from documento as D "
+                                            + "INNER JOIN requerente as R ON D.id_requerente = R.id_requerente "
+                                            + "INNER JOIN natureza_assunto as NA ON D.id_natureza_assunto = NA.id_natureza_assunto "
+                                            + "INNER JOIN tipo_expediente as TE ON D.id_tipo_expediente = TE.id_tipo_expediente";
+    
+    private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where numero_protocolo = ?";
+    
     private Connection conn;
     private ResultSet rs;
     private PreparedStatement ps;
@@ -38,7 +46,7 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
     private RequerenteDAO reqDAO = new RequerenteDAO();
     private NaturezaAssuntoDAO natAssuntoDAO = new NaturezaAssuntoDAO();
     private TipoExpedienteDAO tipoExpedienteDAO = new TipoExpedienteDAO();
-
+    
     @Override
     public void save(Documento documento) {
         try {
@@ -139,11 +147,15 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
             doc.setConteudoDocumento(rs.getString("conteudo_documento"));
             doc.setDataEntrada(rs.getDate("data_entrada"));
             doc.setDescricaoAssunto(rs.getString("descricao_assunto"));
-            doc.setNaturezaAssunto(natAssuntoDAO.findById(rs.getInt("id_natureza_assunto")));
+            doc.getNaturezaAssunto().setIdNaturezaAssunto(rs.getInt("id_natureza_assunto"));
+            doc.getNaturezaAssunto().setNaturezaAssunto(rs.getString("natureza_assunto"));
             doc.setNumeroProtocolo(rs.getInt("numero_protocolo"));
             doc.setOrigem(rs.getString("origem"));
-            doc.setRequerente(reqDAO.findById(rs.getInt("id_requerente")));
-            doc.setTipoExpediente(tipoExpedienteDAO.findById(rs.getInt("id_tipo_expediente")));
+            doc.getRequerente().setIdRequerente(rs.getInt("id_requerente"));
+            doc.getRequerente().setNomeRequerente(rs.getString("nome_requerente"));
+            doc.getRequerente().setSobrenomeRequerente(rs.getString("sobrenome_requerente"));
+            doc.getTipoExpediente().setIdTipoExpediente(rs.getInt("id_tipo_expediente"));
+            doc.getTipoExpediente().setTipoExpediente(rs.getString("tipo_expediente"));
             doc.setUrlFicheiroDocumento(rs.getString("url_ficheiro_documento"));
         } catch (SQLException ex) {
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);

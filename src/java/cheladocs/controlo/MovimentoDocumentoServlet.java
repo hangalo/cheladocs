@@ -10,11 +10,13 @@ import cheladocs.modelo.MovimentoDocumento;
 import cheladocs.util.DateUtil;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -42,9 +44,9 @@ public class MovimentoDocumentoServlet extends HttpServlet {
         MovimentoDocumentoDAO mDocumentoDAO;
         MovimentoDocumento mDocumento = new MovimentoDocumento();
 
-        if (comando == null || !comando.equalsIgnoreCase("principal")) {
+        if (!comando.equalsIgnoreCase("principal")) {
             try {
-                String idMovimentoDocumento = request.getParameter("id_mDocumento");
+                String idMovimentoDocumento = request.getParameter("id_movimento_progressivo");
                 if (idMovimentoDocumento != null) {
                     mDocumento.setIdMovimentoProgressivo(Integer.parseInt(idMovimentoDocumento));
                 }
@@ -59,17 +61,23 @@ public class MovimentoDocumentoServlet extends HttpServlet {
             mDocumentoDAO = new MovimentoDocumentoDAO();
 
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
-                mDocumento.setDataRecepcao(new Date(DateUtil.strToDate(request.getParameter("dataRecepcao")).getTime()));
-                mDocumento.setDataReenvio(new Date(DateUtil.strToDate(request.getParameter("dataReenvio")).getTime()));
-                mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("idDepartamento")));
-                mDocumento.setNotas(request.getParameter("notas"));
+                mDocumento.setDataRecepcao(Date.valueOf(request.getParameter("data_recepcao").trim()));
+                mDocumento.setDataReenvio(Date.valueOf(request.getParameter("data_reenvio").trim()));
                 mDocumento.getDocumento().setNumeroProtocolo(Integer.parseInt(request.getParameter("documento")));
-                if (comando.equalsIgnoreCase("guardar"))
-                    mDocumentoDAO.save(mDocumento);
-                else
-                    mDocumentoDAO.update(mDocumento);
-                response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
-                
+                mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("departamento")));
+                mDocumento.setNotas(request.getParameter("notas"));
+
+                if (mDocumento.getDataReenvio().after(mDocumento.getDataRecepcao())) {
+                    if (comando.equalsIgnoreCase("guardar")) {
+                        mDocumentoDAO.save(mDocumento);
+                    } else {
+                        mDocumentoDAO.update(mDocumento);
+                    }
+                    response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+                } else {
+                    request.setAttribute("erro", "ERRO! A data de reenvio tem que ser maior ou igual que a de recepção");
+                }
+
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 mDocumentoDAO.delete(mDocumento);
                 response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
@@ -86,8 +94,9 @@ public class MovimentoDocumentoServlet extends HttpServlet {
                 response.sendRedirect("/index.jsp");
             }
 
-        } catch (IOException | ServletException ex) {
-            System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+        } catch (NumberFormatException | ServletException ex) {
+            //System.err.println("Erro na leitura dos dados: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 

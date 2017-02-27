@@ -97,7 +97,7 @@ public class ProvinciaDAO implements GenericoDAO<Provincia>{
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(LISTAR_TUDO);
             rs = ps.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 provincia = new Provincia();
                 popularComDados(provincia, rs);
                 listaProvincia.add(provincia);
