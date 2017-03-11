@@ -17,42 +17,34 @@
         <link href="../css/bootstrap.min.css" rel="stylesheet"/>
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
         <script src="../js/jquery-1.12.3.min.js" type="text/javascript"></script>
+
+
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css.map" rel="stylesheet">
+        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap.css.map" rel="stylesheet">
+        <link href="../css/bootstrap.min.css.map" rel="stylesheet">
+        <link href="../css/estilos.css" rel="stylesheet">
+        <link href="../css/layout_paginas.css" rel="stylesheet">
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../js/jquery-1.12.3.min.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/npm.js"></script>
+
     </head>
     <body>
         <div class="container">
 
-            
-             <h2>Modal Example</h2>
-  <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-          <p>Some text in the modal.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-            
-            
+
+
 
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
-                    
+
                     <h1 style="text-align: center">Gerir Requerente</h1>
                 </div>
 
@@ -93,14 +85,9 @@
 
                         </tbody>
                     </table>
-
-
-
-
-
                 </div>
 
-                <!-- Modal -->
+                <!-- Inicio Modal -->
                 <div id="myModal" class="modal fade" role="dialog">
                     <div class="modal-dialog">
 
@@ -146,15 +133,15 @@
                                             <input type="text" class="form-control" name="sobrenome" placeholder="Sobrenome do Requerente" size="200" />
                                         </div>
                                     </div>
-                                    
-                                     <div class="form-group">
+
+                                    <div class="form-group">
                                         <label class="col-xs-3 control-label">Data de Nascimento: </label>
                                         <div class="col-xs-5">
                                             <input type="date" class="form-control" name="data_nascimento"/>
                                         </div>
                                     </div>
-                                    
-                                        <div class="form-group">
+
+                                    <div class="form-group">
                                         <label class="col-xs-3 control-label">Municipio: </label>
                                         <div class="col-xs-5">
                                             <select class="form-control" id="municipio" name="municipio">
@@ -179,35 +166,30 @@
                                             <input type="text" class="form-control" name="telefone_alternatico" placeholder="Nº de telefone alternativo"/>
                                         </div>
                                     </div>
-                                    
-                                     <div class="form-group">
+
+                                    <div class="form-group">
                                         <label class="col-xs-3 control-label">Email principal: </label>
                                         <div class="col-xs-5">
                                             <input type="text" class="form-control" name="email_principal" placeholder="Email principal"/>
                                         </div>
                                     </div>
-                                    
-                                    
-                                      <div class="form-group">
+
+
+                                    <div class="form-group">
                                         <label class="col-xs-3 control-label">Email alternativo: </label>
                                         <div class="col-xs-5">
                                             <input type="text" class="form-control" name="email_alternativo" placeholder="Email principal"/>
                                         </div>
                                     </div>
-                                    
-                                    
+
+
 
                                     <div class="form-group">
                                         <label class="col-xs-3 control-label">Sexo: </label>
                                         <div class="col-xs-5">
-                                           <label class="radio-inline"><input type="radio" name="sexo">Option 1</label>
+                                            <label class="radio-inline"><input type="radio" name="sexo">Option 1</label>
                                         </div>
                                     </div>    
-
-
-
-
-
 
                                 </div>
                                 <div class="modal-footer">
@@ -221,7 +203,7 @@
 
                     </div>
                 </div>
-
+                <!-- Fim Modal dialog -->
             </div>
         </div>
     </body>
