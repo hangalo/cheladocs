@@ -38,7 +38,7 @@
         <div class="container">
 
 
-
+            <%@include file="../cabecalho_rodape/cabecalho.jsp" %>
 
 
             <div id="contentor">
@@ -207,4 +207,5 @@
             </div>
         </div>
     </body>
+    <%@include file="../cabecalho_rodape/rodape.jsp" %>
 </html>

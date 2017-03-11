@@ -17,34 +17,52 @@
     <body>
         
         <div class="jumbotron text-center">
-            <img src="imagens/documents.png" alt="" width="300" height="200"/>
-            <h1>CHELADOCS</h1>
+            <img src="imagens/folderdocuments.png" alt="" width="300" height="200"/>
+          
+            <h1>FenixDocs</h1>
             <p>Sistema de Gestão expediente e documentos</p> 
         </div>
 
         <div class="container">
             <div class="row">
-                <div class="col-sm-4">
-                    <h3>Gestão de expediente</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+                
+                 <div class="col-sm-4">
+                    <center>
+                    <h3>Documentos</h3>
+                    <a href="paginas/movimentoDocumento_listar.jsp">
+                    <img src="imagens/gestao_docs.png" alt="" width="140" height="120"/>
+                    </a>
+                    </center>
                 </div>
                 <div class="col-sm-4">
-                    <h3>Gestão de documentos</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+                    <center>
+                        <h3>Expediente</h3>
+                    <a href="#">
+                    
+                    <img src="imagens/paper-plane.png" alt=""/>
+                    </a>
+                        </center>
                 </div>
+               
                 <div class="col-sm-4">
-                    <h3>Varios</h3>        
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+                    <center>
+                    <h3>Requerentes</h3> 
+                    <a href="paginas/gerir_requente.jsp">
+                    <img src="imagens/requerente.png" alt=""/>
+                    </a>
+                    </center>
                 </div>
             </div>
         </div>
 <div class="jumbotron text-center">
      
-            <h3>Cheladocs - Sistema de gestão expediente e documentos</h3>
-            <a href="administracaosistema/administracao-sistema.jsp" class="btn btn-info" role="button">Entrar</a>
+            <h3>Administrator</h3>
+            <a href="administracaosistema/administracao-sistema.jsp" class="btn btn-info" role="button">
+                
+                <img src="imagens/lock.png" alt="" width="30" height="30"/>
+                
+            
+            </a>
         </div>
     </body>
 </html>
