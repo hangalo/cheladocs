@@ -26,6 +26,7 @@ public class ProvinciaDAO implements GenericoDAO<Provincia>{
     private static final String ELIMINAR = "delete from provincia where id_provincia = ?";
     private static final String BUSCAR_POR_CODIGO = "select * from provincia where id_provincia = ?";
     private static final String BUSCAR_POR_CODIGO_PAIS = "select * from provincia where id_pais = ?";
+    private static final String BUSCAR_POR_PROVINCIA = "SELECT * FROM provincia  WHERE provincia LIKE ?";
     private static final String LISTAR_TUDO ="select * from provincia order by provincia";
 
     private Connection conn;
@@ -137,5 +138,25 @@ public class ProvinciaDAO implements GenericoDAO<Provincia>{
         } catch (SQLException ex) {
             Logger.getLogger(ProvinciaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Provincia> findByName(String nomeProvincia) {
+        Provincia provincia = null;
+        ArrayList<Provincia> listaProvincia = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_PROVINCIA);
+            ps.setString(1, nomeProvincia + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                provincia = new Provincia();
+                popularComDados(provincia, rs);
+                listaProvincia.add(provincia);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaProvincia;
     }
 }

@@ -36,6 +36,8 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
                                             + " INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento";
 
     private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where id_movimento_progressivo = ?";
+    
+    //private static final String BUSCAR_POR_MOVIMENTO = "SELECT * FROM pais  WHERE pais LIKE ?";
 
     private Connection conn;
     private ResultSet rs;
@@ -158,4 +160,9 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
     INNER JOIN documento as doc ON MD.numero_protocolo = doc.numero_protocolo
     INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento
      */
+
+    @Override
+    public List<MovimentoDocumento> findByName(String s) {
+        return null;
+    }
 }

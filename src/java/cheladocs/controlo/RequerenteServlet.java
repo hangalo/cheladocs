@@ -8,6 +8,8 @@ package cheladocs.controlo;
 import cheladocs.dao.RequerenteDAO;
 import cheladocs.modelo.Requerente;
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -57,26 +59,28 @@ public class RequerenteServlet extends HttpServlet {
             requerenteDAO = new RequerenteDAO();
 
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
-
-                requerente.setCategoriaJuridica(request.getParameter("categoria_Juridica"));
-                requerente.setNomeRequerente(request.getParameter("nome_Requerente"));
-                requerente.setSobrenomeRequerente(request.getParameter("sobrenome_Requerente"));
-                requerente.setTelefonePrincipal(request.getParameter("telefone_Principal"));
-                requerente.setTelefoneAlternativo(request.getParameter("telefone_Alternativo"));
-                requerente.setEmailPrincipal(request.getParameter("email_Principal"));
-                requerente.setEmailAlternativo(request.getParameter("email_Alternativo"));
-                requerente.setHomePage(request.getParameter("home_Page"));
+                requerente.setCategoriaJuridica(request.getParameter("categoria_juridica"));
+                requerente.setNomeRequerente(request.getParameter("nome_requerente"));
+                requerente.setSobrenomeRequerente(request.getParameter("sobrenome_requerente"));
+                requerente.setTelefonePrincipal(request.getParameter("telefone_principal"));
+                requerente.setTelefoneAlternativo(request.getParameter("telefone_alternativo"));
+                requerente.setEmailPrincipal(request.getParameter("email_principal"));
+                requerente.setEmailAlternativo(request.getParameter("email_alternativo"));
+                requerente.setHomePage(request.getParameter("home_page"));
+                requerente.setSexoRequerente(request.getParameter("sexo_requerente"));
+                requerente.setDataNascimento(new Date(Calendar.getInstance().getTime().getTime()));
+                //requerente.setDataNascimento(Date.valueOf(request.getParameter("data_nascimento").trim()));
                 
                 if (comando.equalsIgnoreCase("guardar"))
                     requerenteDAO.save(requerente);
                 else
                     requerenteDAO.update(requerente);
             
-                response.sendRedirect("paginas/requerente_listar.jsp");
+                response.sendRedirect("paginas/gerir_requerente.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 requerenteDAO.delete(requerente);
-                response.sendRedirect("paginas/requerente_listar.jsp");
+                response.sendRedirect("paginas/gerir_requerente.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 requerente = requerenteDAO.findById(requerente.getIdRequerente());
@@ -85,7 +89,7 @@ public class RequerenteServlet extends HttpServlet {
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/requerente_listar.jsp");
+                response.sendRedirect("paginas/gerir_requerente.jsp");
             } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");
             }

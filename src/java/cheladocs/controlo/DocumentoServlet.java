@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.util.Calendar;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -122,20 +119,20 @@ public class DocumentoServlet extends HttpServlet {
                 } else {
                     documentoDAO.update(documento);
                 }
-                response.sendRedirect("paginas/documento_listar.jsp");
+                response.sendRedirect("paginas/gerir_documento.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 documentoDAO.delete(documento);
-                response.sendRedirect("paginas/documento_listar.jsp");
+                response.sendRedirect("paginas/gerir_documento.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 documento = documentoDAO.findById(documento.getNumeroProtocolo());
                 request.setAttribute("documento", documento);
-                RequestDispatcher rd = request.getRequestDispatcher("paginas/documento_editar.jsp");
-                rd.forward(request, response);
+                //RequestDispatcher rd = request.getRequestDispatcher("paginas/documento_editar.jsp");
+                //rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/documento_listar.jsp");
+                response.sendRedirect("paginas/gerir_documento.jsp");
             } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");
             }

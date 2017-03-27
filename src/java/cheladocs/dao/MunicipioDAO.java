@@ -6,6 +6,7 @@
 package cheladocs.dao;
 
 import cheladocs.modelo.Municipio;
+import cheladocs.modelo.Municipio;
 import cheladocs.util.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,6 +27,7 @@ public class MunicipioDAO implements GenericoDAO<Municipio>{
     private static final String ELIMINAR = "delete from municipio where id_municipio = ?";
     private static final String BUSCAR_POR_CODIGO = "select * from municipio where id_municipio = ?";
     private static final String BUSCAR_POR_CODIGO_PROVINCIA = "select * from municipio where id_provincia = ?";
+    private static final String BUSCAR_POR_MUNICIPIO = "SELECT * FROM municipio  WHERE municipio LIKE ?";
     private static final String LISTAR_TUDO ="select * from municipio order by municipio";
 
     private Connection conn;
@@ -137,6 +139,26 @@ public class MunicipioDAO implements GenericoDAO<Municipio>{
         } catch (SQLException ex) {
             Logger.getLogger(MunicipioDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Municipio> findByName(String nomeMucipicio) {
+        Municipio municipio = null;
+        ArrayList<Municipio> listaMunicipio = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_MUNICIPIO);
+            ps.setString(1, nomeMucipicio + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                municipio = new Municipio();
+                popularComDados(municipio, rs);
+                listaMunicipio.add(municipio);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaMunicipio;
     }
     
 }

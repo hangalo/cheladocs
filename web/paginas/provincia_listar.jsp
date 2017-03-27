@@ -20,7 +20,7 @@
     </head>
     <body>
         <div class="container">
-
+            <%@include file="../cabecalho_rodape/cabecalho.jsp" %>
             <%
                 ProvinciaDAO provinciaDAO = new ProvinciaDAO();
                 List<Provincia> provincias = provinciaDAO.findAll();

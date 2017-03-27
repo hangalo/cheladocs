@@ -144,5 +144,10 @@ public class EnderecoDAO implements GenericoDAO<Endereco>{
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public List<Endereco> findByName(String s) { 
+        return null;
+    }
     
 }

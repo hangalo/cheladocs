@@ -1,5 +1,5 @@
 <%-- 
-    Document   : documento_listar
+    Document   : gerir_documento
     Created on : 8-feb-2017, 1.01.31
     Author     : informatica
 --%>
@@ -13,10 +13,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Documentos</title>
-        <title>Cheladocs -  Gestão de Documentos</title>
-        <link href="../css/bootstrap.min.css" rel="stylesheet"/>
         <script src="../js/bootstrap.min.js" type="text/javascript"></script>
         <script src="../js/jquery-1.12.3.min.js" type="text/javascript"></script>
+        <script src="../js/modalLink.js" type="text/javascript"></script>
+
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css.map" rel="stylesheet">
+        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap.css.map" rel="stylesheet">
+        <link href="../css/bootstrap.min.css.map" rel="stylesheet">
+        <link href="../css/estilos.css" rel="stylesheet">
+        <link href="../css/layout_paginas.css" rel="stylesheet">
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../js/jquery-1.12.3.min.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/npm.js"></script>
     </head>
     <body>
         <div class="container">
@@ -26,6 +39,7 @@
                 List<Documento> listaDoc = docDAO.findAll();
                 int cont = 0;
             %>
+            <%@include file="../cabecalho_rodape/cabecalho.jsp" %>
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
@@ -34,10 +48,6 @@
 
                 <div id="conteudo">
                     <div id="top" class="row">
-                        <!--<div class="col-md-3">
-                            <h2>Itens</h2>
-                        </div> -->
-
                         <div class="col-md-10">
                             <div class="input-group h2">
                                 <input name="data[search]" class="form-control" id="search" type="text" placeholder="Pesquisar Documento">
@@ -48,9 +58,12 @@
                                 </span>
                             </div>
                         </div>
-
                         <div class="col-md-2">
-                            <a href="documento_guardar.jsp" class="btn btn-primary pull-right h2">Novo Documento</a>
+                            <!-- Trigger the modal with a button -->
+                            <button type="button" class="btn btn-primary pull-right h2" data-toggle="modal" data-target="#myModal" id="modal_link">Novo Documento</button>
+                            <div class="modal-container">
+
+                            </div>
                         </div>
                     </div> 
 
@@ -72,13 +85,13 @@
                             <% cont = cont + 1;%>
                             <tr>
                                 <td><%=cont%></td>
-                                <td><%=doc.getOrigem()%></td>
                                 <td><%=doc.getDescricaoAssunto()%></td>
+                                <td><%=doc.getOrigem()%></td>
                                 <td><%=doc.getDataEntrada()%></td>
                                 <td><%=doc.getNaturezaAssunto().getNaturezaAssunto()%></td>
                                 <td><%=doc.getTipoExpediente().getTipoExpediente()%></td>
                                 <td><%=doc.getRequerente().getNomeRequerente() + " " + doc.getRequerente().getSobrenomeRequerente()%></td>
-                                <td><a href="../DocumentoServlet?comando=prepara_editar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="../imagens/edit.png"/></a></td>
+                                <td> <a href="documento_editar.jsp" data-target="#myModal" data-toggle="modal"><img src="../imagens/edit.png"/></a> </td>
                                 <td><a href="../DocumentoServlet?comando=eliminar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="../imagens/delete.png"/></a></td>
                                 <td><a href="../DocumentoServlet?comando=listar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="../imagens/print.png"/></a></td>
                             </tr>
@@ -88,5 +101,8 @@
                 </div>
             </div>
         </div>
+        <script>
+            apresentarModal('documento_guardar.jsp');
+        </script>
     </body>
 </html>

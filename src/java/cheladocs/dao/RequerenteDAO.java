@@ -22,14 +22,23 @@ import java.util.logging.Logger;
  */
 public class RequerenteDAO implements GenericoDAO<Requerente> {
     
-    private static final String INSERIR = "insert into requerente (categoria_juridica,nome_requerente,sobrenome_requerente,telefone_principal,"
-                                        + "telefone_alternativo_requerente,email_principal_requerente,email_alternativo_requerente,home_page_requerente) "
-                                        + "values (?,?,?,?,?,?,?,?)";
-    private static final String ACTUALIZAR = "update requerente set categoria_juridica = ?,nome_requerente = ?,sobrenome_requerente = ?,telefone_principal = ?,"
-                                           + "telefone_alternativo_requerente = ?,email_principal_requerente = ?,email_alternativo_requerente = ?,home_page_requerente = ?";
+    private static final String INSERIR = "insert into requerente (categoria_juridica,nome_requerente,sobrenome_requerente,telefone_principal,sexo_requerente,"
+                                        + "telefone_alternativo_requerente,email_principal_requerente,email_alternativo_requerente,home_page_requerente, data_nascimento) "
+                                        + "values (?,?,?,?,?,?,?,?,?,?)";
+    
+    private static final String ACTUALIZAR = "update requerente set categoria_juridica = ?,nome_requerente = ?,sobrenome_requerente = ?,telefone_principal = ?,sexo_requerente = ?"
+                                           + "telefone_alternativo_requerente = ?,email_principal_requerente = ?,email_alternativo_requerente = ?,home_page_requerente = ?,"
+                                           + "data_nascimento = ? where id_requerente = ?";
+    
     private static final String ELIMINAR = "delete from requerente where id_requerente = ?";
-    private static final String BUSCAR_POR_CODIGO = "select * from requerente where id_requerente = ?";
-    private static final String LISTAR_TUDO = "select * from requerente";
+    
+    private static final String LISTAR_TUDO = "select id_requerente, nome_requerente, sobrenome_requerente, categoria_juridica,nome_requerente,sobrenome_requerente,telefone_principal,sexo_requerente," 
+                                            + "telefone_alternativo_requerente,email_principal_requerente,email_alternativo_requerente,home_page_requerente, data_nascimento "
+                                            + "from requerente";
+    
+    private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where id_requerente = ?";
+    
+    private static final String BUSCAR_POR_REQUERENTE = LISTAR_TUDO + " where nome_requerente LIKE ? OR sobrenome_requerente LIKE ?";
 
     private Connection conn;
     private ResultSet rs;
@@ -44,11 +53,12 @@ public class RequerenteDAO implements GenericoDAO<Requerente> {
             ps.setString(2, requerente.getNomeRequerente());
             ps.setString(3, requerente.getSobrenomeRequerente());
             ps.setString(4, requerente.getTelefonePrincipal());
-            ps.setString(5, requerente.getTelefoneAlternativo());
-            ps.setString(6, requerente.getEmailPrincipal());
-            ps.setString(7, requerente.getEmailAlternativo());
-            ps.setString(8, requerente.getHomePage());
-            
+            ps.setString(5, requerente.getSexoRequerente());
+            ps.setString(6, requerente.getTelefoneAlternativo());
+            ps.setString(7, requerente.getEmailPrincipal());
+            ps.setString(8, requerente.getEmailAlternativo());
+            ps.setString(9, requerente.getHomePage());
+            ps.setDate(10, requerente.getDataNascimento());
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(RequerenteDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,10 +75,13 @@ public class RequerenteDAO implements GenericoDAO<Requerente> {
             ps.setString(2, requerente.getNomeRequerente());
             ps.setString(3, requerente.getSobrenomeRequerente());
             ps.setString(4, requerente.getTelefonePrincipal());
-            ps.setString(5, requerente.getTelefoneAlternativo());
-            ps.setString(6, requerente.getEmailPrincipal());
-            ps.setString(7, requerente.getEmailAlternativo());
-            ps.setString(8, requerente.getHomePage());
+            ps.setString(5, requerente.getSexoRequerente());
+            ps.setString(6, requerente.getTelefoneAlternativo());
+            ps.setString(7, requerente.getEmailPrincipal());
+            ps.setString(8, requerente.getEmailAlternativo());
+            ps.setString(9, requerente.getHomePage());
+            ps.setDate(10, requerente.getDataNascimento());
+            ps.setInt(11, requerente.getIdRequerente());
             
             ps.executeUpdate();
         } catch (SQLException ex) {
@@ -140,9 +153,31 @@ public class RequerenteDAO implements GenericoDAO<Requerente> {
             r.setSobrenomeRequerente(rs.getString("sobrenome_requerente"));
             r.setTelefoneAlternativo(rs.getString("telefone_alternativo_requerente"));
             r.setTelefonePrincipal(rs.getString("telefone_principal"));
+            r.setDataNascimento(rs.getDate("data_nascimento"));
+            r.setSexoRequerente(rs.getString("sexo_requerente"));            
         } catch (SQLException ex) {
             Logger.getLogger(RequerenteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Requerente> findByName(String nomeRequerente) {
+        Requerente requerente = null;
+        ArrayList<Requerente> listaRequerente = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_REQUERENTE);
+            ps.setString(1, nomeRequerente + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                requerente = new Requerente();
+                popularComDados(requerente, rs);
+                listaRequerente.add(requerente);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaRequerente;
     }
     
 }

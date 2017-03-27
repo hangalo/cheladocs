@@ -5,6 +5,8 @@
  */
 package cheladocs.modelo;
 
+import java.sql.Date;
+
 /**
  *
  * @author Adelino Eduardo
@@ -19,6 +21,8 @@ public class Requerente {
     private String emailPrincipal;
     private String emailAlternativo;
     private String homePage;
+    private String sexoRequerente;
+    private Date dataNascimento;
 
     public int getIdRequerente() {
         return idRequerente;
@@ -91,6 +95,21 @@ public class Requerente {
     public void setHomePage(String homePage) {
         this.homePage = homePage;
     }
-    
+
+    public String getSexoRequerente() {
+        return sexoRequerente;
+    }
+
+    public void setSexoRequerente(String sexoRequerente) {
+        this.sexoRequerente = sexoRequerente;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
     
 }

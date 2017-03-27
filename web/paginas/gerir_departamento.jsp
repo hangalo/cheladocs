@@ -1,5 +1,5 @@
 <%-- 
-    Document   : departamento_listar
+    Document   : gerir_departamento
     Created on : 8-feb-2017, 0.56.57
     Author     : informatica
 --%>
@@ -17,9 +17,23 @@
         <title>Departamentos</title>
 
         <title>Cheladocs -  Gestão de Documentos</title>
+        <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-1.12.3.min.js" type="text/javascript"></script>
+        <script src="../js/modalLink.js" type="text/javascript"></script>
+
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <script src="../js/bootstrap.min.js"></script>
+        <link href="../css/bootstrap-theme.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css.map" rel="stylesheet">
+        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap.css.map" rel="stylesheet">
+        <link href="../css/bootstrap.min.css.map" rel="stylesheet">
+        <link href="../css/estilos.css" rel="stylesheet">
+        <link href="../css/layout_paginas.css" rel="stylesheet">
+        <script src="../../js/bootstrap.min.js"></script>
         <script src="../js/jquery-1.12.3.min.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/npm.js"></script>
     </head>
     <body>
         <div class="container">
@@ -28,6 +42,7 @@
                 List<Departamento> lista_departamento = depDAO.findAll();
                 int cont = 1;
             %>
+            <%@include file="../cabecalho_rodape/cabecalho.jsp" %>
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
@@ -47,14 +62,18 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <a href="departamento_guardar.jsp" class="btn btn-primary pull-right h2">Novo Departamento</a>
+                            <!-- Trigger the modal with a button -->
+                            <button type="button" class="btn btn-primary pull-right h2" data-toggle="modal" data-target="#myModal" id="modal_link">Novo Departamento</button>
+                            <div class="modal-container">
+
+                            </div>
                         </div>
                     </div> 
                     <table class=" table table-hover">
                         <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>País</th>
+                                <th>N/O</th>
+                                <th>Departamento</th>
                                 <th colspan="2">Operações</th>
                             </tr>
                         </thead>
@@ -73,5 +92,8 @@
                 </div>
             </div>
         </div>
+        <script>
+            apresentarModal('departamento_guardar.jsp');
+        </script>
     </body>
 </html>

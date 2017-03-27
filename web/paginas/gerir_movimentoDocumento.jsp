@@ -13,10 +13,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Movimentos</title>
-        <title>Cheladocs -  Gestão de MovimentoDocumentos</title>
-        <link href="../css/bootstrap.min.css" rel="stylesheet"/>
-        <script type="text/javascript" src="../js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+        <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-1.12.3.min.js" type="text/javascript"></script>
+        <script src="../js/modalLink.js" type="text/javascript"></script>
+
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css.map" rel="stylesheet">
+        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap.css.map" rel="stylesheet">
+        <link href="../css/bootstrap.min.css.map" rel="stylesheet">
+        <link href="../css/estilos.css" rel="stylesheet">
+        <link href="../css/layout_paginas.css" rel="stylesheet">
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../js/jquery-1.12.3.min.js"></script>
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/npm.js"></script>
     </head>
     <body>
         <div class="container">
@@ -25,6 +38,7 @@
                 List<MovimentoDocumento> listaMovimentos = movDocumentoDAO.findAll();
                 int cont = 0;
             %>
+            <%@include file="../cabecalho_rodape/cabecalho.jsp" %>
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
@@ -45,7 +59,11 @@
                         </div>
 
                         <div class="col-md-2">
-                            <a href="movimentoDocumento_guardar.jsp" class="btn btn-primary pull-right h2">Novo Movimento</a>
+                            <!-- Trigger the modal with a button -->
+                            <button type="button" class="btn btn-primary pull-right h2" data-toggle="modal" data-target="#myModal" id="modal_link">Novo Movimento</button>
+                            <div class="modal-container">
+
+                            </div>
                         </div>
                     </div> 
 
@@ -53,11 +71,11 @@
                         <thead>
                             <tr>
                                 <th>N/O</th>
-                                <th>Data Recepcao</th>
-                                <th>Data Reenvio</th>
-                                <th>Departamento</th>
                                 <th>Assunto</th>
                                 <th>Origem</th>
+                                <th>Departamento</th>
+                                <th>Data Recepcao</th>
+                                <th>Data Reenvio</th>
                                 <th colspan="3">Operações</th>
                             </tr>
                         </thead>
@@ -66,11 +84,11 @@
                             <% cont = cont + 1;%>
                             <tr>
                                 <td><%=cont%></td>
-                                <td><%=movDoc.getDataRecepcao()%></td>
-                                <td><%=movDoc.getDataReenvio()%></td>
-                                <td><%=movDoc.getDepartamento().getDepartamento()%></td>
                                 <td><%=movDoc.getDocumento().getDescricaoAssunto()%></td>
                                 <td><%=movDoc.getDocumento().getOrigem()%></td>
+                                <td><%=movDoc.getDepartamento().getDepartamento()%></td>
+                                <td><%=movDoc.getDataRecepcao()%></td>
+                                <td><%=movDoc.getDataReenvio()%></td>
                                 <td><a href="../MovimentoDocumentoServlet?comando=prepara_editar&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/edit.png"/></a></td>
                                 <td><a href="../MovimentoDocumentoServlet?comando=eliminar&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/delete.png"/></a></td>
                                 <td><a href="../MovimentoDocumentoServlet?comando=listar&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/print.png"/></a></td>
@@ -81,5 +99,8 @@
                 </div>
             </div>
         </div>
+        <script>
+            apresentarModal('movimentoDocumento_guardar.jsp');
+        </script>
     </body>
 </html>

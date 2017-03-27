@@ -5,9 +5,10 @@
  */
 package cheladocs.controlo;
 
-import cheladocs.dao.NaturezaAssuntoDAO;
-import cheladocs.modelo.NaturezaAssunto;
+import cheladocs.dao.CategoriaJuridicaDAO;
+import cheladocs.modelo.CategoriaJuridica;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Adelino Eduardo
  */
-public class NaturezaAssuntoServlet extends HttpServlet {
+public class CategoriaJuridicaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,14 +38,14 @@ public class NaturezaAssuntoServlet extends HttpServlet {
             comando = "principal";
         }
 
-        NaturezaAssuntoDAO naturezaAssuntoDAO;
-        NaturezaAssunto naturezaAssunto = new NaturezaAssunto();
+        CategoriaJuridicaDAO categoriaJuridicaDAO;
+        CategoriaJuridica categoriaJuridica = new CategoriaJuridica();
 
         if (comando == null || !comando.equalsIgnoreCase("principal")) {
             try {
-                String idNaturezaAssunto = request.getParameter("id_natureza_assunto");
-                if (idNaturezaAssunto != null) {
-                    naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(idNaturezaAssunto));
+                String idCategoriaJuridica = request.getParameter("id_categoriaJuridica");
+                if (idCategoriaJuridica != null) {
+                    categoriaJuridica.setIdCategoriaJuridica(Integer.parseInt(idCategoriaJuridica));
                 }
 
             } catch (NumberFormatException ex) {
@@ -54,40 +55,40 @@ public class NaturezaAssuntoServlet extends HttpServlet {
 
         try {
 
-            naturezaAssuntoDAO = new NaturezaAssuntoDAO();
+            categoriaJuridicaDAO = new CategoriaJuridicaDAO();
 
             if (comando.equalsIgnoreCase("guardar")) {
 
-                naturezaAssunto.setNaturezaAssunto(request.getParameter("natureza_assunto"));
-                naturezaAssuntoDAO.save(naturezaAssunto);
-                response.sendRedirect("paginas/gerir_naturezaAssunto.jsp");
+                categoriaJuridica.setCategoriaJuridica(request.getParameter("nome_categoriaJuridica"));
+                categoriaJuridicaDAO.save(categoriaJuridica);
+                response.sendRedirect("paginas/gerir_categoriaJuridica.jsp");
 
             } else if (comando.equalsIgnoreCase("editar")) {
-                naturezaAssunto.setIdNaturezaAssunto(Integer.parseInt(request.getParameter("id_natureza_assunto")));
-                naturezaAssunto.setNaturezaAssunto(request.getParameter("natureza_assunto"));
-                 System.out.println("NA: " + naturezaAssunto.getNaturezaAssunto());
-                naturezaAssuntoDAO.update(naturezaAssunto);
-                response.sendRedirect("paginas/gerir_naturezaAssunto.jsp");
+                //categoriaJuridica.setIdCategoriaJuridica(Integer.parseInt(request.getParameter("id_categoriaJuridica")));
+                categoriaJuridica.setCategoriaJuridica(request.getParameter("nome_categoriaJuridica"));
+                categoriaJuridicaDAO.update(categoriaJuridica);
+                response.sendRedirect("paginas/gerir_categoriaJuridica.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
-                naturezaAssuntoDAO.delete(naturezaAssunto);
-                response.sendRedirect("paginas/gerir_naturezaAssunto.jsp");
+                categoriaJuridicaDAO.delete(categoriaJuridica);
+                response.sendRedirect("paginas/gerir_categoriaJuridica.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
-                naturezaAssunto = naturezaAssuntoDAO.findById(naturezaAssunto.getIdNaturezaAssunto());
-                request.setAttribute("naturezaAssunto", naturezaAssunto);
-                RequestDispatcher rd = request.getRequestDispatcher("paginas/naturezaAssunto_editar.jsp");
+                categoriaJuridica = categoriaJuridicaDAO.findById(categoriaJuridica.getIdCategoriaJuridica());
+                request.setAttribute("categoriaJuridica", categoriaJuridica);
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/categoriaJuridica_editar.jsp");
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/gerir_naturezaAssunto.jsp");
-            } else if (comando.equalsIgnoreCase("principal")) {
+                response.sendRedirect("paginas/gerir_categoriaJuridica.jsp");
+            } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");
             }
 
-        } catch (IOException | ServletException ex) {
+        } catch (IOException ex) {
             System.err.println("Erro na leitura dos dados: " + ex.getMessage());
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

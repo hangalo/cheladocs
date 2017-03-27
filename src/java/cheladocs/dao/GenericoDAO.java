@@ -18,6 +18,7 @@ public interface GenericoDAO<T> {
     void delete(T t);
     T findById(Integer id);
     List<T> findAll();
+    List<T> findByName(String s);
     void popularComDados(T t, ResultSet rs);
 }
 

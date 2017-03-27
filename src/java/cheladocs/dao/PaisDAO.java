@@ -23,8 +23,9 @@ public class PaisDAO implements GenericoDAO<Pais>{
     private static final String ACTUALIZAR = "update pais set pais = ? where id_pais = ?";
     private static final String ELIMINAR = "delete from pais where id_pais = ?";
     private static final String BUSCAR_POR_CODIGO = "select * from pais where id_pais = ?";
+    private static final String BUSCAR_POR_NOME = "SELECT * FROM pais WHERE pais LIKE ?";
     private static final String LISTAR_TUDO ="select * from pais ";
-
+    
     private Connection conn;
     private ResultSet rs;
     private PreparedStatement ps;
@@ -102,13 +103,24 @@ public class PaisDAO implements GenericoDAO<Pais>{
         finally{ Conexao.closeConnection(conn, ps, rs);}
         return listaPais;
     }
-    
-    public List<Pais> listar_tudo(int lim_inicial, int lim_final) {
+
+    @Override
+    public void popularComDados(Pais pais, ResultSet rs) {
+        try{
+            pais.setIdPais(rs.getInt("id_pais"));
+            pais.setNomePais(rs.getString("nome_pais"));
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+    }
+
+    @Override
+    public List<Pais> findByName(String nomePais) {
         Pais pais = null;
         ArrayList<Pais> listaPais = new ArrayList<>();
         try{
             conn = Conexao.getConnection();
-            ps = conn.prepareStatement(LISTAR_TUDO + " LIMIT " + lim_inicial + "," + lim_final);
+            ps = conn.prepareStatement(BUSCAR_POR_NOME);
+            ps.setString(1, nomePais + "%");
             rs = ps.executeQuery();
             while(rs.next()){
                 pais = new Pais();
@@ -120,14 +132,24 @@ public class PaisDAO implements GenericoDAO<Pais>{
         finally{ Conexao.closeConnection(conn, ps, rs);}
         return listaPais;
     }
-
-    @Override
-    public void popularComDados(Pais pais, ResultSet rs) {
+    
+    public ArrayList<String> findByPais(String nomePais) {
+        Pais pais = null;
+        ArrayList<String> listaPais = new ArrayList<>();
         try{
-            pais.setIdPais(rs.getInt("id_pais"));
-            pais.setNomePais(rs.getString("nome_pais"));
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_NOME);
+            ps.setString(1, nomePais + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                pais = new Pais();
+                popularComDados(pais, rs);
+                listaPais.add(pais.getNomePais());
+            }
         }
         catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaPais;
     }
     
 }

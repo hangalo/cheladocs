@@ -7,16 +7,13 @@ package cheladocs.controlo;
 
 import cheladocs.dao.MovimentoDocumentoDAO;
 import cheladocs.modelo.MovimentoDocumento;
-import cheladocs.util.DateUtil;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -73,14 +70,14 @@ public class MovimentoDocumentoServlet extends HttpServlet {
                     } else {
                         mDocumentoDAO.update(mDocumento);
                     }
-                    response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+                    response.sendRedirect("paginas/gerir_movimentoDocumento.jsp");
                 } else {
                     request.setAttribute("erro", "ERRO! A data de reenvio tem que ser maior ou igual que a de recepção");
                 }
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 mDocumentoDAO.delete(mDocumento);
-                response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+                response.sendRedirect("paginas/gerir_movimentoDocumento.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 mDocumento = mDocumentoDAO.findById(mDocumento.getIdMovimentoProgressivo());
@@ -89,7 +86,7 @@ public class MovimentoDocumentoServlet extends HttpServlet {
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/movimentoDocumento_listar.jsp");
+                response.sendRedirect("paginas/gerir_movimentoDocumento.jsp");
             } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");
             }

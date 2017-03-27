@@ -63,11 +63,11 @@ public class TipoExpedienteServlet extends HttpServlet {
                     tipoExpedienteDAO.save(tipoExpediente);
                 else
                     tipoExpedienteDAO.update(tipoExpediente);
-                response.sendRedirect("paginas/tipoExpediente_listar.jsp");
+                response.sendRedirect("paginas/gerir_tipoExpediente.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 tipoExpedienteDAO.delete(tipoExpediente);
-                response.sendRedirect("paginas/tipoExpediente_listar.jsp");
+                response.sendRedirect("paginas/gerir_tipoExpediente.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 tipoExpediente = tipoExpedienteDAO.findById(tipoExpediente.getIdTipoExpediente());
@@ -76,7 +76,7 @@ public class TipoExpedienteServlet extends HttpServlet {
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/tipoExpediente_listar.jsp");
+                response.sendRedirect("paginas/gerir_tipoExpediente.jsp");
             } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");
             }

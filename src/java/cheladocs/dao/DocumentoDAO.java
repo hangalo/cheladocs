@@ -39,6 +39,8 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
     
     private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where numero_protocolo = ?";
     
+    private static final String BUSCAR_POR_ASSUNTO = LISTAR_TUDO + " WHERE descricao_assunto LIKE ?";
+    
     private Connection conn;
     private ResultSet rs;
     private PreparedStatement ps;
@@ -160,6 +162,26 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
         } catch (SQLException ex) {
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Documento> findByName(String assuntoDocumento) {
+        Documento documento = null;
+        ArrayList<Documento> listaDocumento = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_ASSUNTO);
+            ps.setString(1, assuntoDocumento + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                documento = new Documento();
+                popularComDados(documento, rs);
+                listaDocumento.add(documento);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaDocumento;
     }
     
 }

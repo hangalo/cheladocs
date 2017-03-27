@@ -26,6 +26,7 @@ public class NaturezaAssuntoDAO implements GenericoDAO<NaturezaAssunto>{
     private static final String ACTUALIZAR = "update natureza_assunto set natureza_assunto = ? where id_natureza_assunto = ?";
     private static final String ELIMINAR = "delete from natureza_assunto where id_natureza_assunto = ?";
     private static final String BUSCAR_POR_CODIGO = "select * from natureza_assunto where id_natureza_assunto = ?";
+    private static final String BUSCAR_POR_NAT_ASSUNTO = "SELECT * FROM pais  WHERE natureza_assunto LIKE ?";
     private static final String LISTAR_TUDO ="select * from natureza_assunto order by natureza_assunto";
 
     private Connection conn;
@@ -118,5 +119,25 @@ public class NaturezaAssuntoDAO implements GenericoDAO<NaturezaAssunto>{
         } catch (SQLException ex) {
             Logger.getLogger(NaturezaAssuntoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<NaturezaAssunto> findByName(String nat_assunto) {
+        NaturezaAssunto nAssunto = null;
+        ArrayList<NaturezaAssunto> listaNaturezaAssunto = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_NAT_ASSUNTO);
+            ps.setString(1, nat_assunto + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                nAssunto = new NaturezaAssunto();
+                popularComDados(nAssunto, rs);
+                listaNaturezaAssunto.add(nAssunto);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaNaturezaAssunto;
     }
 }

@@ -25,6 +25,7 @@ public class TipoExpedienteDAO implements GenericoDAO<TipoExpediente>{
     private static final String ACTUALIZAR = "update tipo_expediente set tipo_expediente = ? where id_tipo_expediente = ?";
     private static final String ELIMINAR = "delete from tipo_expediente where id_tipo_expediente = ?";
     private static final String BUSCAR_POR_CODIGO = "select * from tipo_expediente where id_tipo_expediente = ?";
+    private static final String BUSCAR_POR_TIPO_EXPEDIENTE = "select * from tipo_expediente where tipo_expediente LIKE ?";
     private static final String LISTAR_TUDO ="select * from tipo_expediente order by tipo_expediente";
 
     private Connection conn;
@@ -112,6 +113,26 @@ public class TipoExpedienteDAO implements GenericoDAO<TipoExpediente>{
             tipoExpediente.setTipoExpediente(rs.getString("tipo_expediente"));
         }
         catch(SQLException ex){ Logger.getLogger(TipoExpedienteDAO.class.getName()).log(Level.SEVERE, null, ex); }
+    }
+
+    @Override
+    public List<TipoExpediente> findByName(String tipo_expediente) {
+        TipoExpediente tipoExpediente = null;
+        ArrayList<TipoExpediente> listaTipoExpediente = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_TIPO_EXPEDIENTE);
+            ps.setString(1, tipo_expediente + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                tipoExpediente = new TipoExpediente();
+                popularComDados(tipoExpediente, rs);
+                listaTipoExpediente.add(tipoExpediente);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaTipoExpediente;
     }
     
 }

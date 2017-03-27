@@ -60,17 +60,17 @@ public class DepartamentoServlet extends HttpServlet {
 
                 departamento.setDepartamento(request.getParameter("nome_departamento"));
                 departamentoDAO.save(departamento);
-                response.sendRedirect("paginas/departamento_listar.jsp");
+                response.sendRedirect("paginas/gerir_departamento.jsp");
 
             } else if (comando.equalsIgnoreCase("editar")) {
                 //departamento.setIdDepartamento(Integer.parseInt(request.getParameter("id_departamento")));
                 departamento.setDepartamento(request.getParameter("nome_departamento"));
                 departamentoDAO.update(departamento);
-                response.sendRedirect("paginas/departamento_listar.jsp");
+                response.sendRedirect("paginas/gerir_departamento.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 departamentoDAO.delete(departamento);
-                response.sendRedirect("paginas/departamento_listar.jsp");
+                response.sendRedirect("paginas/gerir_departamento.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 departamento = departamentoDAO.findById(departamento.getIdDepartamento());
@@ -79,7 +79,7 @@ public class DepartamentoServlet extends HttpServlet {
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/departamento_listar.jsp");
+                response.sendRedirect("paginas/gerir_departamento.jsp");
             } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");
             }

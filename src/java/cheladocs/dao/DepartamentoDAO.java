@@ -26,6 +26,7 @@ public class DepartamentoDAO implements GenericoDAO<Departamento>{
     private static final String ACTUALIZAR = "update departamento set departamento = ? where id_departamento = ?";
     private static final String ELIMINAR = "delete from departamento where id_departamento = ?";
     private static final String BUSCAR_POR_CODIGO = "select * from departamento where id_departamento = ?";
+    private static final String BUSCAR_POR_DEPARTAMENTO = "SELECT * FROM departamento  WHERE departamento LIKE ?";
     private static final String LISTAR_TUDO ="select * from departamento order by departamento";
 
     private Connection conn;
@@ -118,6 +119,26 @@ public class DepartamentoDAO implements GenericoDAO<Departamento>{
         } catch (SQLException ex) {
             Logger.getLogger(DepartamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<Departamento> findByName(String nomeDepartamento) {
+        Departamento departamento = null;
+        ArrayList<Departamento> listaDepartamento = new ArrayList<>();
+        try{
+            conn = Conexao.getConnection();
+            ps = conn.prepareStatement(BUSCAR_POR_DEPARTAMENTO);
+            ps.setString(1, nomeDepartamento + "%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                departamento = new Departamento();
+                popularComDados(departamento, rs);
+                listaDepartamento.add(departamento);
+            }
+        }
+        catch(SQLException ex){ System.err.print(ex.getMessage()); }
+        finally{ Conexao.closeConnection(conn, ps, rs);}
+        return listaDepartamento;
     }
     
 }
