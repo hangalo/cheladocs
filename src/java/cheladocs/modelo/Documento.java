@@ -5,7 +5,7 @@
  */
 package cheladocs.modelo;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *
@@ -20,7 +20,8 @@ public class Documento {
     private NaturezaAssunto naturezaAssunto;
     private TipoExpediente tipoExpediente;
     private String urlFicheiroDocumento;
-    private String conteudoDocumento;
+    private byte [] conteudoDocumento;
+   
     
     public Documento(){
         requerente = new Requerente();
@@ -92,12 +93,13 @@ public class Documento {
         this.urlFicheiroDocumento = urlFicheiroDocumento;
     }
 
-    public String getConteudoDocumento() {
+    public byte[] getConteudoDocumento() {
         return conteudoDocumento;
     }
 
-    public void setConteudoDocumento(String conteudoDocumento) {
+    public void setConteudoDocumento(byte[] conteudoDocumento) {
         this.conteudoDocumento = conteudoDocumento;
     }
-        
+
+    
 }

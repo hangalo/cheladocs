@@ -42,13 +42,13 @@
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
-                    <h1 style="text-align: center">Gerir Natureza Assunto</h1>
+                    <h1 style="text-align: center">Gerir Tipo Expediente</h1>
                 </div>
                 <div id="conteudo">
                     <div id="top" class="row">
                         <div class="col-md-9">
                             <div class="input-group h2">
-                                <input name="data[search]" class="form-control" id="search" type="text" placeholder="Pesquisar Natureza Assunto">
+                                <input name="data[search]" class="form-control" id="search" type="text" placeholder="Pesquisar Tipo expediente">
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit">
                                         <span class="glyphicon glyphicon-search"></span>
@@ -59,7 +59,7 @@
 
                         <div class="col-md-3">
                             <!-- Trigger the modal with a button -->
-                            <button type="button" class="btn btn-primary pull-right h2" data-toggle="modal" data-target="#myModal" id="modal_link">Nova Natureza Assunto</button>
+                            <button type="button" class="btn btn-primary pull-right h2" data-toggle="modal" data-target="#myModal" id="modal_link">Novo tipo expediente</button>
                             <div class="modal-container">
 
                             </div>

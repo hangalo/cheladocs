@@ -20,54 +20,57 @@ import java.util.logging.Logger;
  *
  * @author Adelino Eduardo
  */
-public class DocumentoDAO implements GenericoDAO<Documento>{
+public class DocumentoDAO implements GenericoDAO<Documento> {
+
     private static final String INSERIR = "insert into documento (id_requerente,data_entrada,origem,descricao_assunto,id_natureza_assunto,"
-                                        + "id_tipo_expediente,url_ficheiro_documento,conteudo_documento) values (?,?,?,?,?,?,?,?)";
-    
+            + "id_tipo_expediente,url_ficheiro_documento,conteudo_documento) values (?,?,?,?,?,?,?,?)";
+
     private static final String ACTUALIZAR = "update documento set id_requerente = ?,data_entrada = ?,origem = ?,descricao_assunto = ?,"
-                                           + "id_natureza_assunto = ?,id_tipo_expediente = ?,url_ficheiro_documento = ?,conteudo_documento = ? "
-                                           + "where numero_protocolo = ?";
-    
+            + "id_natureza_assunto = ?,id_tipo_expediente = ?,url_ficheiro_documento = ?,conteudo_documento = ? "
+            + "where numero_protocolo = ?";
+
     private static final String ELIMINAR = "delete from documento where numero_protocolo = ?";
-    
+
     private static final String LISTAR_TUDO = "select numero_protocolo, data_entrada, origem, descricao_assunto, NA.id_natureza_assunto, natureza_assunto, "
-                                            + "TE.id_tipo_expediente, tipo_expediente, url_ficheiro_documento, conteudo_documento, R.id_requerente, "
-                                            + "nome_requerente, sobrenome_requerente from documento as D "
-                                            + "INNER JOIN requerente as R ON D.id_requerente = R.id_requerente "
-                                            + "INNER JOIN natureza_assunto as NA ON D.id_natureza_assunto = NA.id_natureza_assunto "
-                                            + "INNER JOIN tipo_expediente as TE ON D.id_tipo_expediente = TE.id_tipo_expediente";
-    
+            + "TE.id_tipo_expediente, tipo_expediente, url_ficheiro_documento, conteudo_documento, R.id_requerente, "
+            + "nome_requerente, sobrenome_requerente from documento as D "
+            + "INNER JOIN requerente as R ON D.id_requerente = R.id_requerente "
+            + "INNER JOIN natureza_assunto as NA ON D.id_natureza_assunto = NA.id_natureza_assunto "
+            + "INNER JOIN tipo_expediente as TE ON D.id_tipo_expediente = TE.id_tipo_expediente";
+
     private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where numero_protocolo = ?";
-    
+
     private static final String BUSCAR_POR_ASSUNTO = LISTAR_TUDO + " WHERE descricao_assunto LIKE ?";
-    
+
     private Connection conn;
     private ResultSet rs;
     private PreparedStatement ps;
-    
+
     private RequerenteDAO reqDAO = new RequerenteDAO();
     private NaturezaAssuntoDAO natAssuntoDAO = new NaturezaAssuntoDAO();
     private TipoExpedienteDAO tipoExpedienteDAO = new TipoExpedienteDAO();
-    
+
     @Override
     public void save(Documento documento) {
         try {
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(INSERIR);
             ps.setInt(1, documento.getRequerente().getIdRequerente());
-            ps.setDate(2, documento.getDataEntrada());
+            ps.setDate(2, new java.sql.Date(documento.getDataEntrada().getTime()));
             ps.setString(3, documento.getOrigem());
             ps.setString(4, documento.getDescricaoAssunto());
             ps.setInt(5, documento.getNaturezaAssunto().getIdNaturezaAssunto());
             ps.setInt(6, documento.getTipoExpediente().getIdTipoExpediente());
+          
             ps.setString(7, documento.getUrlFicheiroDocumento());
-            ps.setString(8, documento.getConteudoDocumento());
-            
+              ps.setBytes(8, documento.getConteudoDocumento());
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps);
         }
-        finally{ Conexao.closeConnection(conn, ps); }
     }
 
     @Override
@@ -76,19 +79,20 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(ACTUALIZAR);
             ps.setInt(1, documento.getRequerente().getIdRequerente());
-            ps.setDate(2, documento.getDataEntrada());
+            ps.setDate(2, new java.sql.Date(documento.getDataEntrada().getTime()));
             ps.setString(3, documento.getOrigem());
             ps.setString(4, documento.getDescricaoAssunto());
             ps.setInt(5, documento.getNaturezaAssunto().getIdNaturezaAssunto());
             ps.setInt(6, documento.getTipoExpediente().getIdTipoExpediente());
-            ps.setString(7, documento.getUrlFicheiroDocumento());
-            ps.setString(8, documento.getConteudoDocumento());
+             ps.setString(7, documento.getUrlFicheiroDocumento());
+             ps.setBytes(8, documento.getConteudoDocumento());
             ps.setInt(9, documento.getNumeroProtocolo());
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps);
         }
-        finally{ Conexao.closeConnection(conn, ps); }
     }
 
     @Override
@@ -97,12 +101,13 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(ELIMINAR);
             ps.setInt(1, documento.getNumeroProtocolo());
-            
+
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(DocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps);
         }
-        finally{ Conexao.closeConnection(conn, ps); }
     }
 
     @Override
@@ -113,13 +118,14 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
             ps = conn.prepareStatement(BUSCAR_POR_CODIGO);
             ps.setInt(1, idDocumento);
             rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 popularComDados(documento, rs);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps, rs);
         }
-        finally{ Conexao.closeConnection(conn, ps, rs); }
         return documento;
     }
 
@@ -131,22 +137,23 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(LISTAR_TUDO);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 documento = new Documento();
                 popularComDados(documento, rs);
                 listaDocumento.add(documento);
             }
         } catch (SQLException ex) {
             Logger.getLogger(DocumentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(conn, ps, rs);
         }
-        finally{ Conexao.closeConnection(conn, ps, rs); }
         return listaDocumento;
     }
 
     @Override
     public void popularComDados(Documento doc, ResultSet rs) {
         try {
-            doc.setConteudoDocumento(rs.getString("conteudo_documento"));
+
             doc.setDataEntrada(rs.getDate("data_entrada"));
             doc.setDescricaoAssunto(rs.getString("descricao_assunto"));
             doc.getNaturezaAssunto().setIdNaturezaAssunto(rs.getInt("id_natureza_assunto"));
@@ -158,6 +165,8 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
             doc.getRequerente().setSobrenomeRequerente(rs.getString("sobrenome_requerente"));
             doc.getTipoExpediente().setIdTipoExpediente(rs.getInt("id_tipo_expediente"));
             doc.getTipoExpediente().setTipoExpediente(rs.getString("tipo_expediente"));
+
+            doc.setConteudoDocumento(rs.getBytes("conteudo_documento"));
             doc.setUrlFicheiroDocumento(rs.getString("url_ficheiro_documento"));
         } catch (SQLException ex) {
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -168,20 +177,22 @@ public class DocumentoDAO implements GenericoDAO<Documento>{
     public List<Documento> findByName(String assuntoDocumento) {
         Documento documento = null;
         ArrayList<Documento> listaDocumento = new ArrayList<>();
-        try{
+        try {
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(BUSCAR_POR_ASSUNTO);
             ps.setString(1, assuntoDocumento + "%");
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 documento = new Documento();
                 popularComDados(documento, rs);
                 listaDocumento.add(documento);
             }
+        } catch (SQLException ex) {
+            System.err.print(ex.getMessage());
+        } finally {
+            Conexao.closeConnection(conn, ps, rs);
         }
-        catch(SQLException ex){ System.err.print(ex.getMessage()); }
-        finally{ Conexao.closeConnection(conn, ps, rs);}
         return listaDocumento;
     }
-    
+
 }

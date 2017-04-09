@@ -28,7 +28,7 @@ public class DocumentoDAOTest {
     public void testSave() {
         System.out.println("save");
         Documento documento = new Documento();
-        documento.setConteudoDocumento("A1");
+       // documento.setConteudoDocumento("A1");
         documento.setDataEntrada(new Date(Calendar.getInstance().getTime().getTime()));
         documento.setDescricaoAssunto("D1");
         documento.getNaturezaAssunto().setIdNaturezaAssunto(2);
@@ -47,7 +47,7 @@ public class DocumentoDAOTest {
     public void testUpdate() {
         System.out.println("update");
         Documento documento = new Documento();
-        documento.setConteudoDocumento("A1");
+    //    documento.setConteudoDocumento("A1");
         documento.setDataEntrada(new Date(Calendar.getInstance().getTime().getTime()));
         documento.setDescricaoAssunto("D1");
         documento.getNaturezaAssunto().setIdNaturezaAssunto(1);

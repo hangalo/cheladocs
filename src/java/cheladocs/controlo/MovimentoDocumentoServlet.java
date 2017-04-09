@@ -7,6 +7,7 @@ package cheladocs.controlo;
 
 import cheladocs.dao.MovimentoDocumentoDAO;
 import cheladocs.modelo.MovimentoDocumento;
+import cheladocs.util.DateUtil;
 import java.io.IOException;
 import java.sql.Date;
 import javax.servlet.RequestDispatcher;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MovimentoDocumentoServlet extends HttpServlet {
 
+    
+   
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -59,6 +62,7 @@ public class MovimentoDocumentoServlet extends HttpServlet {
 
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
                 mDocumento.setDataRecepcao(Date.valueOf(request.getParameter("data_recepcao").trim()));
+                 mDocumento.setDataRecepcao( DateUtil.strToDate(request.getParameter("")));
                 mDocumento.setDataReenvio(Date.valueOf(request.getParameter("data_reenvio").trim()));
                 mDocumento.getDocumento().setNumeroProtocolo(Integer.parseInt(request.getParameter("documento")));
                 mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("departamento")));

@@ -37,7 +37,7 @@
                 <div class="col-sm-4">
                     <center>
                         <h3>Expediente</h3>
-                        <a href="paginas/gerir_tipoExpediente.jsp">
+                        <a href="paginas/gerir_movimento_documento.jsp">
                             <img src="imagens/paper-plane.png" alt="" width="140" height="120"/>
                         </a>
                     </center>

@@ -7,29 +7,30 @@
 <%@page import="cheladocs.modelo.Documento"%>
 <%@page import="java.util.List"%>
 <%@page import="cheladocs.dao.DocumentoDAO"%>
+<%@page import="cheladocs.util.DateUtil"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Documentos</title>
-        <script src="../js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../js/jquery-1.12.3.min.js" type="text/javascript"></script>
-        <script src="../js/modalLink.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/js/jquery-1.12.3.min.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/js/modalLink.js" type="text/javascript"></script>
 
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/bootstrap-theme.css" rel="stylesheet">
-        <link href="../css/bootstrap-theme.css.map" rel="stylesheet">
-        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
-        <link href="../css/bootstrap.css" rel="stylesheet">
-        <link href="../css/bootstrap.css.map" rel="stylesheet">
-        <link href="../css/bootstrap.min.css.map" rel="stylesheet">
-        <link href="../css/estilos.css" rel="stylesheet">
-        <link href="../css/layout_paginas.css" rel="stylesheet">
-        <script src="../../js/bootstrap.min.js"></script>
-        <script src="../js/jquery-1.12.3.min.js"></script>
-        <script src="../js/bootstrap.js"></script>
-        <script src="../js/npm.js"></script>
+        <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/bootstrap-theme.css" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/bootstrap-theme.css.map" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/bootstrap.css.map" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/bootstrap.min.css.map" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/estilos.css" rel="stylesheet">
+        <link href="<%=request.getContextPath()%>/css/layout_paginas.css" rel="stylesheet">
+        <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
+        <script src="<%=request.getContextPath()%>/js/jquery-1.12.3.min.js"></script>
+        <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
+        <script src="<%=request.getContextPath()%>/js/npm.js"></script>
     </head>
     <body>
         <div class="container">
@@ -87,13 +88,15 @@
                                 <td><%=cont%></td>
                                 <td><%=doc.getDescricaoAssunto()%></td>
                                 <td><%=doc.getOrigem()%></td>
-                                <td><%=doc.getDataEntrada()%></td>
+                                <td><%=DateUtil.formataData(doc.getDataEntrada())%></td>
                                 <td><%=doc.getNaturezaAssunto().getNaturezaAssunto()%></td>
                                 <td><%=doc.getTipoExpediente().getTipoExpediente()%></td>
                                 <td><%=doc.getRequerente().getNomeRequerente() + " " + doc.getRequerente().getSobrenomeRequerente()%></td>
-                                <td> <a href="documento_editar.jsp" data-target="#myModal" data-toggle="modal"><img src="../imagens/edit.png"/></a> </td>
-                                <td><a href="../DocumentoServlet?comando=eliminar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="../imagens/delete.png"/></a></td>
-                                <td><a href="../DocumentoServlet?comando=listar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="../imagens/print.png"/></a></td>
+                               
+                                <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=prepara_editar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/edit.png" /></a></td>
+                                              
+                                <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=eliminar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/delete.png"/></a></td>
+                                <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=listar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/print.png"/></a></td>
                             </tr>
                             <%}%>
                         </tbody>

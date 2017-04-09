@@ -27,7 +27,7 @@
             <div class="modal-dialog">
 
                 <!-- Modal content-->
-                <form class="form-horizontal" role="form" action="../DocumentoServlet?comando=guardar" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" role="form" action="<%=request.getContextPath()%>/documentoServlet?comando=guardar" method="POST" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>

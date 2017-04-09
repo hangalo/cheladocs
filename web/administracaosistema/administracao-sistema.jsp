@@ -26,9 +26,9 @@
 
             <div class="panel-group">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Movimentos</div>
+                    <div class="panel-heading">Expediente</div>
                     <div class="panel-body">
-                        <a href="../paginas/gerir_movimentoDocumento.jsp" class="btn btn-info" role="button">Gerir Movimentos</a>
+                        <a href="../paginas/gerir_tipoExpediente.jsp" class="btn btn-info" role="button">Gerir Tipo de Expediente</a>
                     </div>
                 </div>
                 <div class="panel panel-default">

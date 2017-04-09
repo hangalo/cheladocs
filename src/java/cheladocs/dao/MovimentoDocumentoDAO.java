@@ -8,7 +8,7 @@ package cheladocs.dao;
 import cheladocs.modelo.MovimentoDocumento;
 import cheladocs.util.Conexao;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,14 +31,13 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
     private static final String ELIMINAR = "delete from movimento_documento where id_movimento_progressivo = ?";
 
     private static final String LISTAR_TUDO = "select id_movimento_progressivo, data_recepcao, data_reenvio, dep.id_departamento, departamento, notas, doc.numero_protocolo,"
-                                            + " descricao_assunto, origem from movimento_documento as MD "
-                                            + " INNER JOIN documento as doc ON MD.numero_protocolo = doc.numero_protocolo "
-                                            + " INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento";
+            + " descricao_assunto, origem from movimento_documento as MD "
+            + " INNER JOIN documento as doc ON MD.numero_protocolo = doc.numero_protocolo "
+            + " INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento";
 
     private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where id_movimento_progressivo = ?";
-    
-    //private static final String BUSCAR_POR_MOVIMENTO = "SELECT * FROM pais  WHERE pais LIKE ?";
 
+    //private static final String BUSCAR_POR_MOVIMENTO = "SELECT * FROM pais  WHERE pais LIKE ?";
     private Connection conn;
     private ResultSet rs;
     private PreparedStatement ps;
@@ -51,8 +50,9 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
         try {
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(INSERIR);
-            ps.setDate(1, mDocumento.getDataRecepcao());
-            ps.setDate(2, mDocumento.getDataReenvio());
+
+            ps.setDate(1, new java.sql.Date(mDocumento.getDataRecepcao().getTime()));
+            ps.setDate(2, new java.sql.Date(mDocumento.getDataReenvio().getTime()));
             ps.setInt(3, mDocumento.getDepartamento().getIdDepartamento());
             ps.setString(4, mDocumento.getNotas());
             ps.setInt(5, mDocumento.getDocumento().getNumeroProtocolo());
@@ -69,8 +69,8 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
         try {
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(ACTUALIZAR);
-            ps.setDate(1, mDocumento.getDataRecepcao());
-            ps.setDate(2, mDocumento.getDataReenvio());
+            ps.setDate(1, new java.sql.Date(mDocumento.getDataRecepcao().getTime()));
+            ps.setDate(2, new java.sql.Date(mDocumento.getDataReenvio().getTime()));
             ps.setInt(3, mDocumento.getDepartamento().getIdDepartamento());
             ps.setString(4, mDocumento.getNotas());
             ps.setInt(5, mDocumento.getDocumento().getNumeroProtocolo());
@@ -160,7 +160,6 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
     INNER JOIN documento as doc ON MD.numero_protocolo = doc.numero_protocolo
     INNER JOIN departamento as dep ON MD.id_departamento = dep.id_departamento
      */
-
     @Override
     public List<MovimentoDocumento> findByName(String s) {
         return null;
