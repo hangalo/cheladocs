@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df2a25b1-48a4-416a-81b0-1658ec5bb7bb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     `id_movimento_progressivo` AS id_movimento_progressivo,
+     `data_recepcao` AS data_recepcao,
+     `data_reenvio` AS data_reenvio,
+     `departamento` AS departamento,
+     `origem` AS origem,
+     `descricao_assunto` AS descricao_assunto
+FROM
+     `departamento` D INNER JOIN `movimento_documento` MD ON D.`id_departamento` = MD.`id_departamento`
+     INNER JOIN `documento` Doc ON MD.`numero_protocolo` = Doc.`numero_protocolo`]]>
+	</queryString>
+	<field name="id_movimento_progressivo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_recepcao" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_reenvio" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="departamento" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="origem" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao_assunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="id_movimento_progressivo">
+		<groupExpression><![CDATA[$F{id_movimento_progressivo}]]></groupExpression>
+		<groupHeader>
+			<band height="37">
+				<frame>
+					<reportElement mode="Opaque" x="2" y="0" width="802" height="24" forecolor="#006699" backcolor="#E6E6E6" uuid="6bcba86f-a621-470b-baf3-0d40ffc43059"/>
+					<textField>
+						<reportElement style="SubTitle" x="74" y="0" width="197" height="24" uuid="5c3a898c-4c6b-47c5-87ad-5aecd3a79d7f"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{descricao_assunto}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="271" y="0" width="183" height="24" uuid="dc60c092-b49f-4cb6-add0-851846935fbb"/>
+						<textFieldExpression><![CDATA[$F{origem}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="454" y="0" width="112" height="24" uuid="feb8c8f6-8640-438e-a23b-9b71f6bdc5ff"/>
+						<textFieldExpression><![CDATA[$F{departamento}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="566" y="0" width="108" height="24" uuid="12fba091-7753-4387-a4d1-c0a82f0e5e32"/>
+						<textFieldExpression><![CDATA[$F{data_recepcao}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="680" y="0" width="120" height="24" uuid="ee1e817d-5d52-4c4a-a1f9-9a2f55d28b88"/>
+						<textFieldExpression><![CDATA[$F{data_reenvio}]]></textFieldExpression>
+					</textField>
+				</frame>
+				<textField>
+					<reportElement style="SubTitle" x="0" y="0" width="76" height="24" forecolor="#736343" uuid="b343fcff-d1e0-4303-89c3-906181718bd3"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{id_movimento_progressivo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<group name="data_recepcao">
+		<groupExpression><![CDATA[$F{data_recepcao}]]></groupExpression>
+		<groupHeader>
+			<band height="30"/>
+		</groupHeader>
+	</group>
+	<group name="data_reenvio">
+		<groupExpression><![CDATA[$F{data_reenvio}]]></groupExpression>
+	</group>
+	<group name="departamento">
+		<groupExpression><![CDATA[$F{departamento}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="136" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="-20" width="843" height="141" backcolor="#006699" uuid="16b64ca5-8a92-4042-bc5a-939a3bd26ad4"/>
+				<staticText>
+					<reportElement x="141" y="14" width="682" height="43" forecolor="#FFFFFF" uuid="e5760b90-eec8-42a1-be43-6e0d911dd745"/>
+					<textElement>
+						<font size="26" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sistema de gestão de Expediente e Documentos]]></text>
+				</staticText>
+				<image>
+					<reportElement x="10" y="10" width="121" height="106" uuid="923f9b78-fcc9-42a4-9031-4845de60e58d"/>
+					<imageExpression><![CDATA["folderdocuments.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="142" y="69" width="479" height="47" forecolor="#FFFFFF" uuid="75ff0814-f6c0-46ac-88c9-c3c58f796979"/>
+					<textElement>
+						<font size="36" isBold="true"/>
+					</textElement>
+					<text><![CDATA[LISTA DE EXPEDIENTES]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1" uuid="093aaf6f-3af5-4998-a996-2079b94fdd03"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="76" y="1" width="197" height="15" forecolor="#666666" backcolor="#E6E6E6" uuid="d49b2fb4-08ec-46cf-8734-c7519afc4e6e"/>
+				<text><![CDATA[Assunto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="682" y="1" width="120" height="15" forecolor="#666666" backcolor="#E6E6E6" uuid="9fe9f080-087e-4fa4-b1db-7d0aeb6c473f"/>
+				<text><![CDATA[Data Reenvio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="458" y="1" width="110" height="15" forecolor="#666666" backcolor="#E6E6E6" uuid="42991c25-81d0-4dd4-abce-cde42cefeb2e"/>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="569" y="0" width="112" height="15" forecolor="#666666" backcolor="#E6E6E6" uuid="5280cd78-5821-42e6-9902-44e4052c5a03"/>
+				<text><![CDATA[Data Recepção]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="2" y="0" width="74" height="15" forecolor="#666666" backcolor="#E6E6E6" uuid="e55183dc-c467-4723-a6d0-9b46902ca319"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="274" y="1" width="183" height="15" forecolor="#666666" backcolor="#E6E6E6" uuid="5595481e-0a2e-4a5b-ba54-692b09f5c5ad"/>
+				<text><![CDATA[Origem]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="802" height="15" uuid="f193e198-8de3-4475-8bc7-447e37bd25f2"/>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1" uuid="689239c4-d169-44bf-b15b-f9a0908ae7a0"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="0" width="801" height="24" forecolor="#006699" backcolor="#E6E6E6" uuid="11525292-90d6-44dd-bbf6-ae9e6fbe8fcb"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="760" y="1" width="40" height="20" forecolor="#736343" uuid="df6ffbc8-811a-4e08-928d-5e64538510aa"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="680" y="1" width="80" height="20" forecolor="#736343" uuid="64c12237-6156-4e04-8bb6-247daf2f3d1e"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="55a2bc1b-3efb-4e12-a30e-e3ef2e29e2e6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

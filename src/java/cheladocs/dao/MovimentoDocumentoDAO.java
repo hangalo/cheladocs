@@ -51,8 +51,8 @@ public class MovimentoDocumentoDAO implements GenericoDAO<MovimentoDocumento> {
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(INSERIR);
 
-            ps.setDate(1, new java.sql.Date(mDocumento.getDataRecepcao().getTime()));
-            ps.setDate(2, new java.sql.Date(mDocumento.getDataReenvio().getTime()));
+            ps.setDate(1, mDocumento.getDataRecepcao());
+            ps.setDate(2, mDocumento.getDataReenvio());
             ps.setInt(3, mDocumento.getDepartamento().getIdDepartamento());
             ps.setString(4, mDocumento.getNotas());
             ps.setInt(5, mDocumento.getDocumento().getNumeroProtocolo());

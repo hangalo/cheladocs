@@ -46,7 +46,7 @@
                 <div class="col-sm-4">
                     <center>
                         <h3>Requerentes</h3> 
-                        <a href="paginas/gerir_requente.jsp">
+                        <a href="paginas/gerir_requerente.jsp">
                             <img src="imagens/requerente.png" alt=""/>
                         </a>
                     </center>

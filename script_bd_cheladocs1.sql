@@ -18,7 +18,7 @@
 -- Create schema cheladocs
 --
 
-CREATE DATABASE IF NOT EXISTS cheladocs;
+CREATE DATABASE IF NOT EXISTS cheladocs DEFAULT CHARACTER SET utf8;
 USE cheladocs;
 
 --
@@ -30,21 +30,10 @@ CREATE TABLE `departamento` (
   `id_departamento` int(11) NOT NULL AUTO_INCREMENT,
   `departamento` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_departamento`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `departamento`
---
+INSERT INTO `departamento` (`id_departamento`,`departamento`) VALUES (1,'Recursos Humanos');
 
-/*!40000 ALTER TABLE `departamento` DISABLE KEYS */;
-INSERT INTO `departamento` (`id_departamento`,`departamento`) VALUES 
- (1,'Recursos Humanos');
-/*!40000 ALTER TABLE `departamento` ENABLE KEYS */;
-
-
---
--- Definition of table `documento`
---
 
 DROP TABLE IF EXISTS `documento`;
 CREATE TABLE `documento` (
@@ -64,19 +53,8 @@ CREATE TABLE `documento` (
   CONSTRAINT `fk_documento_natureza_assunto` FOREIGN KEY (`id_natureza_assunto`) REFERENCES `natureza_assunto` (`id_natureza_assunto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_documento_solicitante1` FOREIGN KEY (`id_requerente`) REFERENCES `requerente` (`id_requerente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_documento_tipo_expediente1` FOREIGN KEY (`id_tipo_expediente`) REFERENCES `tipo_expediente` (`id_tipo_expediente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `documento`
---
-
-/*!40000 ALTER TABLE `documento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `documento` ENABLE KEYS */;
-
-
---
--- Definition of table `endereco`
---
 
 DROP TABLE IF EXISTS `endereco`;
 CREATE TABLE `endereco` (
@@ -95,19 +73,8 @@ CREATE TABLE `endereco` (
   KEY `fk_endereco_requerente1_idx` (`id_requerente`),
   CONSTRAINT `fk_endereco_provincia1` FOREIGN KEY (`id_provincia`) REFERENCES `provincia` (`id_provincia`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_endereco_requerente1` FOREIGN KEY (`id_requerente`) REFERENCES `requerente` (`id_requerente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `endereco`
---
-
-/*!40000 ALTER TABLE `endereco` DISABLE KEYS */;
-/*!40000 ALTER TABLE `endereco` ENABLE KEYS */;
-
-
---
--- Definition of table `movimento_documento`
---
 
 DROP TABLE IF EXISTS `movimento_documento`;
 CREATE TABLE `movimento_documento` (
@@ -122,19 +89,8 @@ CREATE TABLE `movimento_documento` (
   KEY `fk_movimento_documento_documento1_idx` (`numero_protocolo`),
   CONSTRAINT `fk_movimento_documento_departamento1` FOREIGN KEY (`id_departamento`) REFERENCES `departamento` (`id_departamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_movimento_documento_documento1` FOREIGN KEY (`numero_protocolo`) REFERENCES `documento` (`numero_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `movimento_documento`
---
-
-/*!40000 ALTER TABLE `movimento_documento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `movimento_documento` ENABLE KEYS */;
-
-
---
--- Definition of table `municipio`
---
 
 DROP TABLE IF EXISTS `municipio`;
 CREATE TABLE `municipio` (
@@ -144,13 +100,8 @@ CREATE TABLE `municipio` (
   PRIMARY KEY (`id_municipio`),
   KEY `fk_municipio_provincia1_idx` (`id_provincia`),
   CONSTRAINT `fk_municipio_provincia1` FOREIGN KEY (`id_provincia`) REFERENCES `provincia` (`id_provincia`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `municipio`
---
-
-/*!40000 ALTER TABLE `municipio` DISABLE KEYS */;
 INSERT INTO `municipio` (`id_municipio`,`municipio`,`id_provincia`) VALUES 
  (1,'Ambriz',1),
  (2,'Bula Atumba',1),
@@ -312,33 +263,17 @@ INSERT INTO `municipio` (`id_municipio`,`municipio`,`id_provincia`) VALUES
  (158,'N\'Zeto',18),
  (159,'Soyo',18),
  (160,'Tomboco',18);
-/*!40000 ALTER TABLE `municipio` ENABLE KEYS */;
 
-
---
--- Definition of table `natureza_assunto`
---
 
 DROP TABLE IF EXISTS `natureza_assunto`;
 CREATE TABLE `natureza_assunto` (
   `id_natureza_assunto` int(11) NOT NULL AUTO_INCREMENT,
   `natureza_assunto` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_natureza_assunto`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `natureza_assunto`
---
+INSERT INTO `natureza_assunto` (`id_natureza_assunto`,`natureza_assunto`) VALUES (2,'NA1');
 
-/*!40000 ALTER TABLE `natureza_assunto` DISABLE KEYS */;
-INSERT INTO `natureza_assunto` (`id_natureza_assunto`,`natureza_assunto`) VALUES 
- (2,'A1');
-/*!40000 ALTER TABLE `natureza_assunto` ENABLE KEYS */;
-
-
---
--- Definition of table `pais`
---
 
 DROP TABLE IF EXISTS `pais`;
 CREATE TABLE `pais` (
@@ -346,13 +281,9 @@ CREATE TABLE `pais` (
   `nome_pais` varchar(50) DEFAULT NULL,
   `name_pais` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_pais`)
-) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `pais`
---
 
-/*!40000 ALTER TABLE `pais` DISABLE KEYS */;
 INSERT INTO `pais` (`id_pais`,`nome_pais`,`name_pais`) VALUES 
  (1,'AFEGANISTÃO','AFGHANISTAN'),
  (2,'ACROTÍRI E DECELIA','AKROTIRI E DEKÉLIA'),
@@ -606,12 +537,7 @@ INSERT INTO `pais` (`id_pais`,`nome_pais`,`name_pais`) VALUES
  (250,'WALLIS E FUTUNA','WALLIS AND FUTUNA'),
  (251,'ZÂMBIA','ZAMBIA'),
  (252,'ZIMBABUÉ','ZIMBABWE');
-/*!40000 ALTER TABLE `pais` ENABLE KEYS */;
 
-
---
--- Definition of table `provincia`
---
 
 DROP TABLE IF EXISTS `provincia`;
 CREATE TABLE `provincia` (
@@ -621,13 +547,8 @@ CREATE TABLE `provincia` (
   PRIMARY KEY (`id_provincia`),
   KEY `fk_provincia_pais1_idx` (`id_pais`),
   CONSTRAINT `fk_provincia_pais1` FOREIGN KEY (`id_pais`) REFERENCES `pais` (`id_pais`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `provincia`
---
-
-/*!40000 ALTER TABLE `provincia` DISABLE KEYS */;
 INSERT INTO `provincia` (`id_provincia`,`provincia`,`id_pais`) VALUES 
  (1,'Bengo',8),
  (2,'Benguela',8),
@@ -647,17 +568,12 @@ INSERT INTO `provincia` (`id_provincia`,`provincia`,`id_pais`) VALUES
  (16,'Namibe',8),
  (17,'Uige',8),
  (18,'Zaire',8);
-/*!40000 ALTER TABLE `provincia` ENABLE KEYS */;
 
-
---
--- Definition of table `requerente`
---
 
 DROP TABLE IF EXISTS `requerente`;
 CREATE TABLE `requerente` (
   `id_requerente` int(11) NOT NULL AUTO_INCREMENT,
-  `categoria_juridica` char(20) DEFAULT NULL,
+  `id_categoria_juridica` int(11) NOT NULL,
   `nome_requerente` varchar(45) DEFAULT NULL,
   `sobrenome_requerente` varchar(45) DEFAULT NULL,
   `telefone_principal` varchar(45) DEFAULT NULL,
@@ -667,56 +583,32 @@ CREATE TABLE `requerente` (
   `home_page_requerente` varchar(45) DEFAULT NULL,
   `sexo_requerente` char(20) DEFAULT NULL,
   `data_nascimento` date DEFAULT NULL,
-  PRIMARY KEY (`id_requerente`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id_requerente`),
+  
+  KEY `fk_requerente_id_categoria_juridica_idx` (`id_categoria_juridica`),
+  CONSTRAINT `fk_requerente_id_categoria_juridica` FOREIGN KEY (`id_categoria_juridica`) REFERENCES `categoria_juridica` (`id_categoria_juridica`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARACTER SET utf8;
 
---
--- Dumping data for table `requerente`
---
+INSERT INTO `requerente` (`id_requerente`,`id_categoria_juridica`,`nome_requerente`,`sobrenome_requerente`,`telefone_principal`,`telefone_alternativo_requerente`,`email_principal_requerente`,`email_alternativo_requerente`,`home_page_requerente`,`sexo_requerente`,`data_nascimento`) VALUES 
+ (1,1,'André','José','123456','456789','andre@gmail.com','123@hotmail.com','www.andre.co.ao','Masculino','1985/05/15');
 
-/*!40000 ALTER TABLE `requerente` DISABLE KEYS */;
-INSERT INTO `requerente` (`id_requerente`,`categoria_juridica`,`nome_requerente`,`sobrenome_requerente`,`telefone_principal`,`telefone_alternativo_requerente`,`email_principal_requerente`,`email_alternativo_requerente`,`home_page_requerente`,`sexo_requerente`,`data_nascimento`) VALUES 
- (1,'A1','André','José','123456','456789','andre@gmail.com','123@hotmail.com','www.andre.co.ao',NULL,NULL);
-/*!40000 ALTER TABLE `requerente` ENABLE KEYS */;
-
-
---
--- Definition of table `tipo_expediente`
---
 
 DROP TABLE IF EXISTS `tipo_expediente`;
 CREATE TABLE `tipo_expediente` (
   `id_tipo_expediente` int(11) NOT NULL AUTO_INCREMENT,
   `tipo_expediente` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_tipo_expediente`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
+INSERT INTO `tipo_expediente` (`id_tipo_expediente`, `tipo_expediente`) VALUES ('1', 'TE1'),('2', 'TE2');
 
---
--- Dumping data for table `tipo_expediente`
---
-
-/*!40000 ALTER TABLE `tipo_expediente` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tipo_expediente` ENABLE KEYS */;
-
---
--- Definition of table `categoria_juridica`
---
 
 DROP TABLE IF EXISTS `categoria_juridica`;
 CREATE TABLE `categoria_juridica` (
   `id_categoria_juridica` INT NOT NULL AUTO_INCREMENT,
   `categoria_juridica` VARCHAR(45) NULL,
   PRIMARY KEY (`id_categoria_juridica`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARACTER SET utf8;
 
 INSERT INTO `categoria_juridica` (`id_categoria_juridica`, `categoria_juridica`) VALUES ('1', 'CJ1'),('2', 'CJ2');
 
-
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

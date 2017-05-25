@@ -66,7 +66,11 @@
                                 <div class="form-group">
                                     <label class="col-xs-3 control-label">Categoria Juridica: </label>
                                     <div class="col-xs-5">
-                                        <input type="text" class="form-control" name="categoria_juridica" placeholder="Categoria Jurídica"/>
+                                        <select class="form-control" name="categoria_juridica">
+                                            <% for (CategoriaJuridica CJ : categoriaJuridicaDao.findAll()) {%>
+                                            <option value="<%=CJ.getCategoriaJuridica()%>"><%=CJ.getCategoriaJuridica()%></option>
+                                            <% } %>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

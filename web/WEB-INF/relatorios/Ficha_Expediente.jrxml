@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6487d589-83fe-4d24-bb93-5ae44067b68e">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="id_movimento_progressivo" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     `id_movimento_progressivo` AS id_movimento_progressivo,
+     `data_recepcao` AS data_recepcao,
+     `data_reenvio` AS data_reenvio,
+     `departamento` AS departamento,
+     `origem` AS origem,
+     `descricao_assunto` AS descricao_assunto,
+     `notas` AS notas
+FROM
+     `departamento` D INNER JOIN `movimento_documento` MD ON D.`id_departamento` = MD.`id_departamento`
+     INNER JOIN `documento` Doc ON MD.`numero_protocolo` = Doc.`numero_protocolo`
+WHERE
+     id_movimento_progressivo = $P{id_movimento_progressivo}]]>
+	</queryString>
+	<field name="id_movimento_progressivo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_recepcao" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_reenvio" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="departamento" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="origem" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao_assunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="notas" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="id_movimento_progressivo">
+		<groupExpression><![CDATA[$F{id_movimento_progressivo}]]></groupExpression>
+		<groupHeader>
+			<band height="31">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="140" y="2" width="415" height="27" uuid="c902ebb7-6eb8-4cfc-a6da-16ed9a374826"/>
+					<textElement textAlignment="Justified">
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{id_movimento_progressivo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="3" y="2" width="132" height="27" forecolor="#000000" uuid="fc68f676-f114-40d1-b5f3-ea2a327c40d6"/>
+					<textElement textAlignment="Justified">
+						<font isBold="false"/>
+					</textElement>
+					<text><![CDATA[Código]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="6"/>
+		</groupFooter>
+	</group>
+	<group name="origem">
+		<groupExpression><![CDATA[$F{origem}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="141" y="1" width="415" height="27" uuid="ee245c09-b9e0-40b6-aa5c-47dc3d934ae5"/>
+					<textElement textAlignment="Justified">
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{data_reenvio}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="4" y="1" width="132" height="27" forecolor="#000000" uuid="dbfc30ea-fb60-44f4-a9c1-b2f0d3b71b00"/>
+					<textElement textAlignment="Justified">
+						<font isBold="false"/>
+					</textElement>
+					<text><![CDATA[Data Recepção]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="descricao_assunto">
+		<groupExpression><![CDATA[$F{descricao_assunto}]]></groupExpression>
+	</group>
+	<group name="departamento">
+		<groupExpression><![CDATA[$F{departamento}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="-19" width="596" height="141" backcolor="#006699" uuid="9abdfcc4-f480-4478-ac3c-74f953051736"/>
+				<staticText>
+					<reportElement x="131" y="14" width="465" height="43" forecolor="#FFFFFF" uuid="812ddfdf-3d21-428e-a1ae-47cfdf0e3c5a"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sistema de gestão de Expediente e Documentos]]></text>
+				</staticText>
+				<image>
+					<reportElement x="10" y="10" width="121" height="106" uuid="e4de4515-9407-463a-8bf8-18cb07824361"/>
+					<imageExpression><![CDATA["folderdocuments.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="142" y="73" width="435" height="43" forecolor="#FFFFFF" uuid="26c05b15-d5c8-4b23-93d4-cec268c46ca1"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[DADOS DO EXPEDIENTE]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="164" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="157" width="551" height="1" uuid="93b725b6-e230-4f2b-b9f9-26768919ce33"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="140" y="57" width="415" height="27" uuid="7c763601-0895-4758-b134-cf9d5e30ad52"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{origem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="57" width="132" height="27" forecolor="#000000" uuid="368778f0-e075-40a4-b5b6-d8bbbd0b322b"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Origem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="3" y="30" width="132" height="27" forecolor="#000000" uuid="7a117925-d95c-4c46-88cc-9b9c71439465"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="141" y="30" width="415" height="27" uuid="c7343c44-c9fc-4460-9bda-a51a608a5124"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{departamento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="140" y="0" width="416" height="27" uuid="97e65cae-ac6c-4860-bb6b-56ebd543d899"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_recepcao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="0" y="3" width="132" height="24" forecolor="#000000" uuid="8218edb5-ad6e-4dee-bd1c-7a735d1b097e"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Data Reenvio]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="141" y="84" width="415" height="27" uuid="4720fe29-b07c-4b3b-b9f0-62f6a41fa8cf"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao_assunto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="3" y="84" width="132" height="27" forecolor="#000000" uuid="c4bbe34f-490c-4deb-a534-7b8655511da0"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Descricao Assunto]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="141" y="111" width="415" height="27" uuid="40f10698-e2e0-479e-b92f-a199a16e627d"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notas}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="3" y="111" width="132" height="27" forecolor="#000000" uuid="c88b955c-55fc-44c1-b57e-b74dd8b2efe9"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Notas]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="871e8dd1-f9ec-43b8-b0a2-48708e796b22"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

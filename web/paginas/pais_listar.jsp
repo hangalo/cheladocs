@@ -25,7 +25,7 @@
 
 
     </head>
-    <body>
+    <body onload="init()">
         <div class="container formDiv">
             <%@include file="../cabecalho_rodape/cabecalho.jsp" %>
             <%

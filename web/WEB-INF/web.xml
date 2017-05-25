@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    
     <servlet>
         <servlet-name>PaisServlet</servlet-name>
         <servlet-class>cheladocs.controlo.PaisServlet</servlet-class>
@@ -29,7 +28,6 @@
         <servlet-name>RequerenteServlet</servlet-name>
         <servlet-class>cheladocs.controlo.RequerenteServlet</servlet-class>
     </servlet>
-  
     <servlet>
         <servlet-name>MovimentoDocumentoServlet</servlet-name>
         <servlet-class>cheladocs.controlo.MovimentoDocumentoServlet</servlet-class>
@@ -38,7 +36,10 @@
         <servlet-name>CategoriaJuridicaServlet</servlet-name>
         <servlet-class>cheladocs.controlo.CategoriaJuridicaServlet</servlet-class>
     </servlet>
-  
+    <servlet>
+        <servlet-name>RequerentRelatorio</servlet-name>
+        <servlet-class>cheladocs.controlo.RequerentRelatorio</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>PaisServlet</servlet-name>
         <url-pattern>/PaisServlet</url-pattern>
@@ -67,7 +68,6 @@
         <servlet-name>RequerenteServlet</servlet-name>
         <url-pattern>/RequerenteServlet</url-pattern>
     </servlet-mapping>
-  
     <servlet-mapping>
         <servlet-name>MovimentoDocumentoServlet</servlet-name>
         <url-pattern>/MovimentoDocumentoServlet</url-pattern>
@@ -76,13 +76,15 @@
         <servlet-name>CategoriaJuridicaServlet</servlet-name>
         <url-pattern>/CategoriaJuridicaServlet</url-pattern>
     </servlet-mapping>
-   
+    <servlet-mapping>
+        <servlet-name>RequerentRelatorio</servlet-name>
+        <url-pattern>/RequerentRelatorio</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-   
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>

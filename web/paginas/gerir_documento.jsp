@@ -34,7 +34,6 @@
     </head>
     <body>
         <div class="container">
-
             <%
                 DocumentoDAO docDAO = new DocumentoDAO();
                 List<Documento> listaDoc = docDAO.findAll();
@@ -44,9 +43,9 @@
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
+                    <a href="<%=request.getContextPath()%>/documentoServlet?comando=imprimir_todos" class="btn btn-info" role="button">Gerar Relatório</a>
                     <h1 style="text-align: center">Lista de Documentos</h1>
                 </div>
-
                 <div id="conteudo">
                     <div id="top" class="row">
                         <div class="col-md-10">
@@ -96,7 +95,7 @@
                                 <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=prepara_editar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/edit.png" /></a></td>
                                               
                                 <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=eliminar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/delete.png"/></a></td>
-                                <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=listar&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/print.png"/></a></td>
+                                <td><a href="<%=request.getContextPath()%>/documentoServlet?comando=imprimir_by_id&numero_protocolo=<%=doc.getNumeroProtocolo()%>"><img src="<%=request.getContextPath()%>/imagens/print.png"/></a></td>
                             </tr>
                             <%}%>
                         </tbody>

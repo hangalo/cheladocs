@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81e38ae4-c1bd-45bf-99e2-756c3cc89674">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     `numero_protocolo` AS documento_numero_protocolo,
+     `data_entrada` AS documento_data_entrada,
+     `origem` AS documento_origem,
+     `descricao_assunto` AS assunto,
+     TE.`tipo_expediente` AS t_expediente,
+	 CONCAT_WS(' ',nome_requerente,sobrenome_requerente) AS Requerente,
+     natureza_assunto AS natureza_assunto
+FROM
+     `tipo_expediente` TE INNER JOIN `documento` D ON TE.`id_tipo_expediente` = D.`id_tipo_expediente`
+     INNER JOIN `requerente` R ON D.`id_requerente` = R.`id_requerente`
+     INNER JOIN `natureza_assunto` NA ON D.`id_natureza_assunto` = NA.`id_natureza_assunto`]]>
+	</queryString>
+	<field name="documento_numero_protocolo" class="java.lang.Integer"/>
+	<field name="documento_data_entrada" class="java.sql.Date"/>
+	<field name="documento_origem" class="java.lang.String"/>
+	<field name="assunto" class="java.lang.String"/>
+	<field name="t_expediente" class="java.lang.String"/>
+	<field name="Requerente" class="java.lang.String"/>
+	<field name="natureza_assunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="documento_numero_protocolo">
+		<groupExpression><![CDATA[$F{documento_numero_protocolo}]]></groupExpression>
+		<groupHeader>
+			<band height="37">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="8" width="802" height="24" forecolor="#006699" backcolor="#E6E6E6" uuid="2a3036cb-d01f-45e5-82b0-d41672dd1655"/>
+					<textField>
+						<reportElement style="SubTitle" x="1" y="0" width="75" height="24" forecolor="#736343" uuid="8690db99-d308-4a2d-949d-316134866de1"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{documento_numero_protocolo}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="79" y="0" width="105" height="24" uuid="f7be7f72-1bc8-4c6f-b90e-53387a8bcdd0"/>
+						<textFieldExpression><![CDATA[$F{assunto}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="336" y="0" width="87" height="24" uuid="0027034f-3758-427f-b0c0-6be28f29df33"/>
+						<textFieldExpression><![CDATA[$F{documento_data_entrada}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="428" y="0" width="127" height="24" uuid="6725e826-5598-4170-ae84-d6536041519d"/>
+						<textFieldExpression><![CDATA[$F{natureza_assunto}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="189" y="0" width="142" height="24" uuid="7af38aef-844c-4f0a-81a8-ddf4b202b819"/>
+						<textFieldExpression><![CDATA[$F{documento_origem}]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true">
+						<reportElement style="Detail" x="562" y="0" width="94" height="24" uuid="5298e142-f25c-42c7-8703-4e416e071641"/>
+						<textFieldExpression><![CDATA[$F{t_expediente}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement style="SubTitle" x="662" y="0" width="139" height="22" uuid="2eeec2c4-acbb-491e-94db-ae09fc91ba0b"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{Requerente}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="assunto">
+		<groupExpression><![CDATA[$F{assunto}]]></groupExpression>
+		<groupHeader>
+			<band height="16"/>
+		</groupHeader>
+	</group>
+	<group name="documento_origem">
+		<groupExpression><![CDATA[$F{documento_origem}]]></groupExpression>
+	</group>
+	<group name="natureza_assunto">
+		<groupExpression><![CDATA[$F{natureza_assunto}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="136" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="-20" width="843" height="141" backcolor="#006699" uuid="e89db79f-29d8-4002-b6bf-681dc761ca83"/>
+				<staticText>
+					<reportElement x="141" y="14" width="682" height="43" forecolor="#FFFFFF" uuid="12752fcf-c3da-4323-bc4f-551779d1bb7c"/>
+					<textElement>
+						<font size="26" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sistema de gestão de Expediente e Documentos]]></text>
+				</staticText>
+				<image>
+					<reportElement x="10" y="10" width="121" height="106" uuid="d7b75029-c774-4d7a-b82f-918352bdeb72"/>
+					<imageExpression><![CDATA["folderdocuments.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="142" y="69" width="479" height="47" forecolor="#FFFFFF" uuid="5fe55e0b-5d99-4ddf-bd5d-786c481a842c"/>
+					<textElement>
+						<font size="36" isBold="true"/>
+					</textElement>
+					<text><![CDATA[LISTA DE DOCUMENTOS]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1" uuid="1be04357-a099-427d-803c-c1be5b8efd47"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="428" y="0" width="127" height="15" forecolor="#736343" uuid="207fdf1f-e529-4c56-9f29-bef0e954b218"/>
+				<text><![CDATA[Natureza do Assunto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="194" y="0" width="137" height="15" forecolor="#736343" uuid="cbe1761a-5b22-43b0-a0ee-fb88b601095a"/>
+				<text><![CDATA[Origem do Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="336" y="-1" width="87" height="15" forecolor="#736343" uuid="db6f554f-5086-45a5-a80a-f9e2e47710d4"/>
+				<text><![CDATA[Data Entrada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="662" y="-1" width="140" height="15" forecolor="#736343" uuid="b92868ea-6cb4-448a-adb9-0bbbf2f38165"/>
+				<text><![CDATA[Requerente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="4" y="1" width="77" height="15" forecolor="#736343" uuid="388c72b9-fca0-406f-a8ae-fbbd84f97e6e"/>
+				<text><![CDATA[Nº Protocolo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="84" y="1" width="105" height="15" forecolor="#736343" uuid="5cdd0cef-027e-4300-b785-3168ff0d7e14"/>
+				<text><![CDATA[Assunto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="562" y="0" width="94" height="15" forecolor="#736343" uuid="573b5737-9b52-4040-922e-0c8b4149e9c5"/>
+				<text><![CDATA[Tipo Expediente]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1" uuid="66dd91f6-8fa3-44ac-90a3-59f35ea9d867"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="0" width="801" height="24" forecolor="#006699" backcolor="#E6E6E6" uuid="4399a143-7d90-47cf-bfab-9b6ea3c754c5"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="760" y="1" width="40" height="20" forecolor="#736343" uuid="68770c69-c5f7-4ae4-931e-8050321851ed"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="680" y="1" width="80" height="20" forecolor="#736343" uuid="cd7149f9-314e-466e-92ed-864a6bf9e77a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="f77932e6-a46f-482d-bf93-bad06417d888"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

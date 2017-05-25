@@ -42,6 +42,7 @@
             <div id="contentor">
                 <div id="banner">
                     <a href="../index.jsp" class="btn btn-info" role="button">Home</a>
+                    <a href="<%=request.getContextPath()%>/MovimentoDocumentoServlet?comando=imprimir_todos" class="btn btn-info" role="button">Gerar Relatório</a>
                     <h1 style="text-align: center">Lista de Movimento de Documentos</h1>
                 </div>
 
@@ -91,7 +92,7 @@
                                 <td><%=movDoc.getDataReenvio()%></td>
                                 <td><a href="../MovimentoDocumentoServlet?comando=prepara_editar&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/edit.png"/></a></td>
                                 <td><a href="../MovimentoDocumentoServlet?comando=eliminar&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/delete.png"/></a></td>
-                                <td><a href="../MovimentoDocumentoServlet?comando=listar&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/print.png"/></a></td>
+                                <td><a href="../MovimentoDocumentoServlet?comando=imprimir_by_id&id_movimento_progressivo=<%=movDoc.getIdMovimentoProgressivo()%>"><img src="../imagens/print.png"/></a></td>
                             </tr>
                             <%}%>
                         </tbody>

@@ -8,8 +8,11 @@ package cheladocs.controlo;
 import cheladocs.dao.MovimentoDocumentoDAO;
 import cheladocs.modelo.MovimentoDocumento;
 import cheladocs.util.DateUtil;
+import cheladocs.util.ReporteUtil;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,7 +65,7 @@ public class MovimentoDocumentoServlet extends HttpServlet {
 
             if (comando.equalsIgnoreCase("guardar") || comando.equalsIgnoreCase("editar")) {
                 mDocumento.setDataRecepcao(Date.valueOf(request.getParameter("data_recepcao").trim()));
-                 mDocumento.setDataRecepcao( DateUtil.strToDate(request.getParameter("")));
+                //mDocumento.setDataRecepcao( DateUtil.strToDate(request.getParameter("")));
                 mDocumento.setDataReenvio(Date.valueOf(request.getParameter("data_reenvio").trim()));
                 mDocumento.getDocumento().setNumeroProtocolo(Integer.parseInt(request.getParameter("documento")));
                 mDocumento.getDepartamento().setIdDepartamento(Integer.parseInt(request.getParameter("departamento")));
@@ -74,25 +77,37 @@ public class MovimentoDocumentoServlet extends HttpServlet {
                     } else {
                         mDocumentoDAO.update(mDocumento);
                     }
-                    response.sendRedirect("paginas/gerir_movimentoDocumento.jsp");
+                    response.sendRedirect("paginas/gerir_movimento_documento.jsp");
                 } else {
                     request.setAttribute("erro", "ERRO! A data de reenvio tem que ser maior ou igual que a de recepção");
                 }
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
                 mDocumentoDAO.delete(mDocumento);
-                response.sendRedirect("paginas/gerir_movimentoDocumento.jsp");
+                response.sendRedirect("paginas/gerir_movimento_documento.jsp");
 
             } else if (comando.equalsIgnoreCase("prepara_editar")) {
                 mDocumento = mDocumentoDAO.findById(mDocumento.getIdMovimentoProgressivo());
                 request.setAttribute("mDocumento", mDocumento);
-                RequestDispatcher rd = request.getRequestDispatcher("/paginas/movimentoDocumento_editar.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/paginas/movimento_documento_editar.jsp");
                 rd.forward(request, response);
             } else if (comando.equalsIgnoreCase("listar")) {
 
-                response.sendRedirect("paginas/gerir_movimentoDocumento.jsp");
-            } else if (comando.equalsIgnoreCase("principla")) {
-                response.sendRedirect("/index.jsp");
+                response.sendRedirect("paginas/gerir_movimento_documento.jsp");
+            } else if (comando.equalsIgnoreCase("imprimir_todos") || comando.equalsIgnoreCase("imprimir_by_id")) {
+                ReporteUtil reporte = new ReporteUtil();
+                File caminhoRelatorio = null;
+                HashMap hashMap = new HashMap();
+                
+                if (comando.equalsIgnoreCase("imprimir_todos")){
+                    caminhoRelatorio = new File(getServletConfig().getServletContext().getRealPath("/WEB-INF/relatorios/ExpedienteListar.jasper"));
+                    reporte.geraRelatorio(caminhoRelatorio.getPath(), hashMap, response);
+                }
+                else{
+                    hashMap.put("id_movimento_progressivo", mDocumento.getIdMovimentoProgressivo());
+                    caminhoRelatorio = new File(getServletConfig().getServletContext().getRealPath("/WEB-INF/relatorios/Ficha_Expediente.jasper"));
+                    reporte.geraRelatorio(caminhoRelatorio.getPath(), hashMap, response);
+                }
             }
 
         } catch (NumberFormatException | ServletException ex) {

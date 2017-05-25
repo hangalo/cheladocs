@@ -5,7 +5,9 @@
  */
 package cheladocs.modelo;
 
-import java.util.Date;
+import java.sql.Date;
+
+
 
 /**
  *

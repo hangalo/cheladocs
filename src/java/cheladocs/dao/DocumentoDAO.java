@@ -8,6 +8,7 @@ package cheladocs.dao;
 import cheladocs.modelo.Documento;
 import cheladocs.util.Conexao;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -56,14 +57,13 @@ public class DocumentoDAO implements GenericoDAO<Documento> {
             conn = Conexao.getConnection();
             ps = conn.prepareStatement(INSERIR);
             ps.setInt(1, documento.getRequerente().getIdRequerente());
-            ps.setDate(2, new java.sql.Date(documento.getDataEntrada().getTime()));
+            ps.setDate(2, documento.getDataEntrada());
             ps.setString(3, documento.getOrigem());
             ps.setString(4, documento.getDescricaoAssunto());
             ps.setInt(5, documento.getNaturezaAssunto().getIdNaturezaAssunto());
             ps.setInt(6, documento.getTipoExpediente().getIdTipoExpediente());
-          
             ps.setString(7, documento.getUrlFicheiroDocumento());
-              ps.setBytes(8, documento.getConteudoDocumento());
+            ps.setBytes(8, documento.getConteudoDocumento());
 
             ps.executeUpdate();
         } catch (SQLException ex) {

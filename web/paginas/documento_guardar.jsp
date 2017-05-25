@@ -52,7 +52,7 @@
                                 <div class="form-group">
                                     <label class="col-xs-2 control-label">Data Entrada: </label>
                                     <div class="col-xs-5">
-                                        <input type="date" class="form-control" name="data_entrada" placeholder="data_entrada"/>
+                                        <input type="date" class="form-control" name="data_entrada" placeholder="Data Entrada"/>
                                     </div>
                                 </div>
                                 <div class="form-group">

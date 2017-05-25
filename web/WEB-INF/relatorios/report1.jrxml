@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f48c2752-2992-45be-9c4d-1618303f9a7d">
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     tipo_expediente.`id_tipo_expediente` AS tipo_expediente_id_tipo_expediente,
+     tipo_expediente.`tipo_expediente` AS tipo_expediente_tipo_expediente
+FROM
+     `tipo_expediente` tipo_expediente]]>
+	</queryString>
+	<field name="tipo_expediente_id_tipo_expediente" class="java.lang.Integer"/>
+	<field name="tipo_expediente_tipo_expediente" class="java.lang.String"/>
+	<group name="tipo_expediente_id_tipo_expediente">
+		<groupExpression><![CDATA[$F{tipo_expediente_id_tipo_expediente}]]></groupExpression>
+		<groupHeader>
+			<band height="33">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="100" height="32" forecolor="#666666" backcolor="#E6E6E6" uuid="c66e2fdd-948e-4cf2-a614-25d46b10c2b4"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[tipo_expediente_id_tipo_expediente]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="100" y="0" width="455" height="32" forecolor="#006699" backcolor="#E6E6E6" uuid="391bf994-ab6b-4d6a-90b0-6b62a1c45388"/>
+					<textElement>
+						<font size="24" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipo_expediente_id_tipo_expediente}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="-20" y="32" width="595" height="1" forecolor="#666666" uuid="00e266d8-38d7-424c-9c51-51c108a65dd4"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="tipo_expediente_tipo_expediente">
+		<groupExpression><![CDATA[$F{tipo_expediente_tipo_expediente}]]></groupExpression>
+		<groupHeader>
+			<band height="32">
+				<textField>
+					<reportElement x="100" y="0" width="455" height="32" forecolor="#006699" uuid="db3f2618-6f46-4121-9ba8-b02016352b85"/>
+					<textElement>
+						<font size="22" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipo_expediente_tipo_expediente}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="100" height="20" forecolor="#666666" uuid="0d80a49d-bb66-4674-a05e-77535d79797e"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[tipo_expediente_tipo_expediente]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="cb8d138d-90ba-4e7d-a1af-cad1848420bb"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="a05ff834-1ac2-41a5-9c96-a2662f709a70"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TITLE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="9f900d9e-a0a2-48e3-9c07-c8999a31dac2"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Add a description here]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="d408694d-66b7-4306-882b-5d48eb033979"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="86f09c5e-9412-4450-a8f8-8df47c7eee9e"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="025b0071-1b03-4345-8225-505a26d4b658"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="fdabddb7-d7e5-42f5-a85f-c02f719b8bf1"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="e8bf3fe5-b4a4-4ac3-946c-58c6bfc0c755"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

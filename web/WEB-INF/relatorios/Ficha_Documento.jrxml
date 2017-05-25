@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e749469-3723-4e77-a66a-d36c8eb3fef0">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="codigo_documento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     `numero_protocolo` AS numero_protocolo,
+     `data_entrada` AS data_entrada,
+     `origem` AS origem,
+     `descricao_assunto` AS assunto,
+     CONCAT_WS(' ',nome_requerente,sobrenome_requerente) AS Requerente,
+     natureza_assunto AS natureza_assunto,
+     TE.`tipo_expediente` AS t_expediente
+FROM
+     `tipo_expediente` TE INNER JOIN `documento` D ON TE.`id_tipo_expediente` = D.`id_tipo_expediente`
+     INNER JOIN `requerente` R ON D.`id_requerente` = R.`id_requerente`
+     INNER JOIN `natureza_assunto` NA ON D.`id_natureza_assunto` = NA.`id_natureza_assunto`
+WHERE
+     numero_protocolo = $P{codigo_documento}]]>
+	</queryString>
+	<field name="numero_protocolo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_entrada" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="origem" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="assunto" class="java.lang.String"/>
+	<field name="Requerente" class="java.lang.String"/>
+	<field name="natureza_assunto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="t_expediente" class="java.lang.String"/>
+	<group name="numero_protocolo">
+		<groupExpression><![CDATA[$F{numero_protocolo}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="138" y="0" width="415" height="27" uuid="d036c544-d0bf-44db-bb85-7cb97fb933b4"/>
+					<textElement textAlignment="Justified">
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numero_protocolo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="1" y="0" width="132" height="27" forecolor="#000000" uuid="8d065486-b3b2-4fc3-af7b-afa887651d8b"/>
+					<textElement textAlignment="Justified">
+						<font isBold="false"/>
+					</textElement>
+					<text><![CDATA[Número Protocolo]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="assunto">
+		<groupExpression><![CDATA[$F{assunto}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="138" y="0" width="415" height="27" uuid="85b447cf-2389-47fc-a6da-2746f8f2b68f"/>
+					<textElement textAlignment="Justified">
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{assunto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" positionType="Float" x="1" y="0" width="132" height="27" forecolor="#000000" uuid="dec75f87-87f7-4f1e-abe1-ab9d8edc0e5f"/>
+					<textElement textAlignment="Justified">
+						<font isBold="false"/>
+					</textElement>
+					<text><![CDATA[Assunto]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="natureza_assunto">
+		<groupExpression><![CDATA[$F{natureza_assunto}]]></groupExpression>
+	</group>
+	<group name="origem">
+		<groupExpression><![CDATA[$F{origem}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="596" height="141" backcolor="#006699" uuid="4540b6ae-d3ea-42a4-867c-5776b87f7380"/>
+				<staticText>
+					<reportElement x="131" y="14" width="465" height="43" forecolor="#FFFFFF" uuid="b832ff5e-5ab9-4a95-8e4b-cda489444e56"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sistema de gestão de Expediente e Documentos]]></text>
+				</staticText>
+				<image>
+					<reportElement x="10" y="10" width="121" height="106" uuid="4dbc6156-7163-47cd-96b2-fa7da1d58a69"/>
+					<imageExpression><![CDATA["folderdocuments.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="142" y="73" width="435" height="43" forecolor="#FFFFFF" uuid="05251a5d-1324-437f-815d-b8543c0c1a89"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[DADOS DO DOCUMENTO]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="148" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="139" width="551" height="1" uuid="0c5e3b14-c1ff-4651-a909-71d404cc6828"/>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="139" y="0" width="415" height="27" uuid="6777329a-86ac-4efd-a8d9-7e09cb8d5661"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{origem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="1" y="0" width="132" height="27" forecolor="#000000" uuid="10138ef4-60f6-4097-97f2-f31a9d207d1e"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Origem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="1" y="27" width="132" height="27" forecolor="#000000" uuid="7e00bd4b-d9d2-46a0-9531-45524f416791"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Data Entrada]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="139" y="27" width="415" height="27" uuid="713cc8bf-8953-437f-9cca-2ccee1caa828"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_entrada}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="139" y="54" width="415" height="27" uuid="70f07790-ffb7-4b83-b264-13b0fc34451b"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{t_expediente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="1" y="54" width="132" height="27" forecolor="#000000" uuid="7fac9302-e9e5-446a-8f6a-e88cd0dc6518"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tipo Expediente]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="139" y="81" width="415" height="27" uuid="467b9570-3c74-4b0c-b25f-b9f45895c099"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{natureza_assunto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="1" y="81" width="132" height="27" forecolor="#000000" uuid="66aff89b-9969-45f2-9462-f108f4ce2e77"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Natureza do Assunto]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" positionType="Float" x="138" y="108" width="415" height="27" uuid="15b2bf33-2549-4130-8e56-2488069f96f9"/>
+				<textElement textAlignment="Justified">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Requerente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="0" y="108" width="132" height="27" forecolor="#000000" uuid="1e80aacb-9faa-4b94-8f09-3b608a346987"/>
+				<textElement textAlignment="Justified">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Requerente]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="d1fbeb2a-c941-4909-bed5-e9ba35afb42b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="1" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="7b3ff971-27bd-46b1-9711-cbddaf9c0c31"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="0" width="40" height="13" forecolor="#FFFFFF" uuid="c973b763-e96e-434c-8262-8afe8b863a20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="433" y="0" width="80" height="13" forecolor="#FFFFFF" uuid="2ea281eb-6c69-474d-a0a2-eb518a7d5e37"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF" uuid="f984cac0-7f2a-47d9-b054-d0a914c52a87"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

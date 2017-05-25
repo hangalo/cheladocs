@@ -7,9 +7,11 @@ package cheladocs.controlo;
 
 import cheladocs.dao.RequerenteDAO;
 import cheladocs.modelo.Requerente;
+import cheladocs.util.ReporteUtil;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Calendar;
+import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,6 +36,7 @@ public class RequerenteServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String comando = request.getParameter("comando");
+        String idRequerente = null;
 
         if (comando == null) {
             comando = "principal";
@@ -44,7 +47,7 @@ public class RequerenteServlet extends HttpServlet {
 
         if (comando == null || !comando.equalsIgnoreCase("principal")) {
             try {
-                String idRequerente = request.getParameter("id_requerente");
+                idRequerente = request.getParameter("id_requerente");
                 if (idRequerente != null) {
                     requerente.setIdRequerente(Integer.parseInt(idRequerente));
                 }
@@ -68,14 +71,14 @@ public class RequerenteServlet extends HttpServlet {
                 requerente.setEmailAlternativo(request.getParameter("email_alternativo"));
                 requerente.setHomePage(request.getParameter("home_page"));
                 requerente.setSexoRequerente(request.getParameter("sexo_requerente"));
-                requerente.setDataNascimento(new Date(Calendar.getInstance().getTime().getTime()));
-                //requerente.setDataNascimento(Date.valueOf(request.getParameter("data_nascimento").trim()));
-                
-                if (comando.equalsIgnoreCase("guardar"))
+                requerente.setDataNascimento(Date.valueOf(request.getParameter("data_nascimento")));
+
+                if (comando.equalsIgnoreCase("guardar")) {
                     requerenteDAO.save(requerente);
-                else
+                } else {
                     requerenteDAO.update(requerente);
-            
+                }
+
                 response.sendRedirect("paginas/gerir_requerente.jsp");
 
             } else if (comando.equalsIgnoreCase("eliminar")) {
@@ -87,8 +90,22 @@ public class RequerenteServlet extends HttpServlet {
                 request.setAttribute("requerente", requerente);
                 RequestDispatcher rd = request.getRequestDispatcher("/paginas/requerente_editar.jsp");
                 rd.forward(request, response);
-            } else if (comando.equalsIgnoreCase("listar")) {
+            } else if (comando.equalsIgnoreCase("imprimir_todos") || comando.equalsIgnoreCase("imprimir_by_id")) {
+                ReporteUtil reporte = new ReporteUtil();
+                File caminhoRelatorio = null;
+                HashMap hashMap = new HashMap();
+                
+                if (comando.equalsIgnoreCase("imprimir_todos")){
+                    caminhoRelatorio = new File(getServletConfig().getServletContext().getRealPath("/WEB-INF/relatorios/RequerenteListar.jasper"));
+                    reporte.geraRelatorio(caminhoRelatorio.getPath(), hashMap, response);
+                }
+                else{
+                    hashMap.put("codigo_requerente", Integer.parseInt(idRequerente));
+                    caminhoRelatorio = new File(getServletConfig().getServletContext().getRealPath("/WEB-INF/relatorios/Ficha_Requerente.jasper"));
+                    reporte.geraRelatorio(caminhoRelatorio.getPath(), hashMap, response);
+                }
 
+            } else if (comando.equalsIgnoreCase("listar")) {
                 response.sendRedirect("paginas/gerir_requerente.jsp");
             } else if (comando.equalsIgnoreCase("principla")) {
                 response.sendRedirect("/index.jsp");

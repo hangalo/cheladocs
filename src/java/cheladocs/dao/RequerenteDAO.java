@@ -7,14 +7,22 @@ package cheladocs.dao;
 
 import cheladocs.modelo.Requerente;
 import cheladocs.util.Conexao;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperRunManager;
 
 /**
  *
@@ -22,11 +30,11 @@ import java.util.logging.Logger;
  */
 public class RequerenteDAO implements GenericoDAO<Requerente> {
     
-    private static final String INSERIR = "insert into requerente (categoria_juridica,nome_requerente,sobrenome_requerente,telefone_principal,sexo_requerente,"
+    private static final String INSERIR = "insert into requerente (id_categoria_juridica,nome_requerente,sobrenome_requerente,telefone_principal,sexo_requerente,"
                                         + "telefone_alternativo_requerente,email_principal_requerente,email_alternativo_requerente,home_page_requerente, data_nascimento) "
                                         + "values (?,?,?,?,?,?,?,?,?,?)";
     
-    private static final String ACTUALIZAR = "update requerente set categoria_juridica = ?,nome_requerente = ?,sobrenome_requerente = ?,telefone_principal = ?,sexo_requerente = ?"
+    private static final String ACTUALIZAR = "update requerente set id_categoria_juridica = ?,nome_requerente = ?,sobrenome_requerente = ?,telefone_principal = ?,sexo_requerente = ?"
                                            + "telefone_alternativo_requerente = ?,email_principal_requerente = ?,email_alternativo_requerente = ?,home_page_requerente = ?,"
                                            + "data_nascimento = ? where id_requerente = ?";
     
@@ -34,7 +42,7 @@ public class RequerenteDAO implements GenericoDAO<Requerente> {
     
     private static final String LISTAR_TUDO = "select id_requerente, nome_requerente, sobrenome_requerente, categoria_juridica,nome_requerente,sobrenome_requerente,telefone_principal,sexo_requerente," 
                                             + "telefone_alternativo_requerente,email_principal_requerente,email_alternativo_requerente,home_page_requerente, data_nascimento "
-                                            + "from requerente";
+                                            + "from requerente R inner join categoria_juridica CJ ON R.id_categoria_juridica = CJ.id_categoria_juridica";
     
     private static final String BUSCAR_POR_CODIGO = LISTAR_TUDO + " where id_requerente = ?";
     

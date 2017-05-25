@@ -7,14 +7,13 @@ package cheladocs.controlo;
 
 import cheladocs.dao.DocumentoDAO;
 import cheladocs.modelo.Documento;
-import cheladocs.util.DateUtil;
+import cheladocs.util.ReporteUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.Calendar;
+import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -34,6 +33,7 @@ import org.apache.commons.io.IOUtils;
 public class DocumentoServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    String idDocumento;
 
      protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -52,7 +52,7 @@ public class DocumentoServlet extends HttpServlet {
 
         if (comando == null || !comando.equalsIgnoreCase("principal")) {
             try {
-                String idDocumento = request.getParameter("numero_protocolo");
+                idDocumento = request.getParameter("numero_protocolo");
                 if (idDocumento != null) {
                     documento.setNumeroProtocolo(Integer.parseInt(idDocumento));
                 }
@@ -69,8 +69,7 @@ public class DocumentoServlet extends HttpServlet {
             if (comando.equalsIgnoreCase("guardar")) {
 
                 documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("requerente")));
-                documento.setDataEntrada(new Date(Calendar.getInstance().getTime().getTime()));
-                documento.setDataEntrada(DateUtil.strToDate(request.getParameter("data_entrada")));
+                documento.setDataEntrada(Date.valueOf(request.getParameter("data_entrada")));
                 documento.setOrigem(request.getParameter("origem_documento"));
                 documento.setDescricaoAssunto(request.getParameter("descricao_assunto"));
                 documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("natureza_assunto")));
@@ -90,7 +89,7 @@ public class DocumentoServlet extends HttpServlet {
                 documento.setNumeroProtocolo(Integer.parseInt(request.getParameter("requerente")));
 
                 documento.getRequerente().setIdRequerente(Integer.parseInt(request.getParameter("requerente")));
-                documento.setDataEntrada(new Date(Calendar.getInstance().getTime().getTime()));
+                documento.setDataEntrada(Date.valueOf(request.getParameter("data_entrada")));
                 documento.setOrigem(request.getParameter("origem_documento"));
                 documento.setDescricaoAssunto(request.getParameter("descricao_assunto"));
                 documento.getNaturezaAssunto().setIdNaturezaAssunto(Integer.parseInt(request.getParameter("natureza_assunto")));
@@ -119,14 +118,22 @@ public class DocumentoServlet extends HttpServlet {
             } else if (comando.equalsIgnoreCase("listar")) {
 
                 response.sendRedirect("paginas/gerir_documento.jsp");
-            } else if (comando.equalsIgnoreCase("principla")) {
-                response.sendRedirect("/index.jsp");
+            } else if (comando.equalsIgnoreCase("imprimir_todos") || comando.equalsIgnoreCase("imprimir_by_id")) {
+                ReporteUtil reporte = new ReporteUtil();
+                File caminhoRelatorio = null;
+                HashMap hashMap = new HashMap();
+                
+                if (comando.equalsIgnoreCase("imprimir_todos")){
+                    caminhoRelatorio = new File(getServletConfig().getServletContext().getRealPath("/WEB-INF/relatorios/DocumentoListar.jasper"));
+                    reporte.geraRelatorio(caminhoRelatorio.getPath(), hashMap, response);
+                }
+                else{
+                    hashMap.put("codigo_documento", Integer.parseInt(idDocumento));
+                    caminhoRelatorio = new File(getServletConfig().getServletContext().getRealPath("/WEB-INF/relatorios/Ficha_Documento.jasper"));
+                    reporte.geraRelatorio(caminhoRelatorio.getPath(), hashMap, response);
+                }
             }
-
-        } catch (IOException ex) {
-            //System.err.println("Erro na leitura dos dados: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+        } catch (IOException ex) { ex.printStackTrace(); }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -172,7 +179,6 @@ public class DocumentoServlet extends HttpServlet {
         try {
 
             InputStream in = part.getInputStream();
-
                        
             File f = new File("c:\\ficheiros_docs\\" + part.getSubmittedFileName());
         
